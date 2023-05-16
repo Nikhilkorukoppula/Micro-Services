@@ -1,0 +1,16 @@
+
+
+
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: nikhil
+    password: nikhil
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: department
+  config:
+    import: "optional:configserver:http://localhost:8007/"
