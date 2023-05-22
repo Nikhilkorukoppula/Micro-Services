@@ -1,0 +1,32 @@
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: "optional:configserver:http://localhost:8007/"
+  cloud:
+    gateway:
+      routes:
+        - id: department
+          uri: lb://department
+          predicates:
+          - Path= /product/**
+
+
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+          - Path= /orders/**
+
+
+        - id: service-registry
+          uri: http://localhost:8888
+          predicates:
+            - Path= /eureka/web
+          filters:
+            - SetPath=/
+
+        - id: discovery-service-registry
+          uri: http://localhost:8888
+          predicates:
+            - Path= /eureka/**
