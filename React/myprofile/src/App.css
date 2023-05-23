@@ -15,11 +15,37 @@
 }
 .div{
   display: flex;
-  width: 300px;
-  background-color: lightgrey;
-  height: 300px;
-  margin-top: 50px;
+  width: 500px;
+  background-color: white;
+  height: 310px;
  padding: 10px;
+ margin-top: 70px;
+}
+.div4{
+  display: flex;
+  width: 500px;
+  background-color: white;
+  height: 310px;
+ padding: 10px;
+ margin-top: 70px;
+ margin-left: 100px;
+}
+.div5 {
+  display: flex;
+  width: 500px;
+  background-color: white;
+  height: 310px;
+ padding: 10px;
+ margin-top: 70px;
+ margin-left: 30px;
+} 
+.dive{
+  display: flex;
+  width: 500px;
+  background-color: white;
+  height: 300px;
+ padding: 10px;
+ margin-top: 70px;
 }
 .div2{
   display: flex;
@@ -30,6 +56,22 @@
   margin-top: 50px;
  padding: 10px;
 }
+.desc{
+  margin-top: 50px;
+  width: 300px;
+  background-color: lightgrey;
+  height: 20px;
+  text-align: right;
+}
+.box1{
+
+    display: grid;
+    grid-template-rows: 2fr 2fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 100px;
+    width: 1000px;
+  
+}
 .div-cont{
   display: flex;
   top: 0;
@@ -37,22 +79,37 @@
 }
 .Avatar{
   left: 50%;
-  margin: -50px;
-  padding: 40px;
+  margin-bottom: -70px;
+  margin-top: 10px;
+}
+.avatar-div{
+  width: 100px;
+  position: center;
+margin-left: 700px;
+margin-top: -70px;
 }
 .avatar-name {
+  
   font-size: 16px;
   font-weight: bold;
-  margin-left: 370px;
+  margin-left: 400px;
+ 
+  padding-top: 20px;
   color: #333;
-  /* Additional styles for the name */
+  height: 40px;
 }
+.footer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: '60px';
 
+}
 .avatar-disabled {
-  height: 40px; /* Adjust the height to match the avatar size */
+  height: 40px;
   display: flex;
   align-items: center;
-  /* Additional styles for the disabled state */
+  
 }
 .my-button {
   position: absolute;
