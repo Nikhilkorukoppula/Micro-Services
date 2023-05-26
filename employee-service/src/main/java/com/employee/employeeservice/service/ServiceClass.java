@@ -20,7 +20,7 @@ public class ServiceClass {
 
     public String add(Order order){
         String oname=order.getName();
-    String name=webClient.get().uri("http://localhost:8008/product/getByName",uriBuilder -> uriBuilder.queryParam("name",oname).build())
+    String name=webClient.get().uri("http://DEPARTMENT/product/getByName?name="+oname)
                  .retrieve().bodyToMono(String.class).block();
     if(name!=null){
         repo.save(order);

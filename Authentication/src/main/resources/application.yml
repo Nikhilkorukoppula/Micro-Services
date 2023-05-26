@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nikhil
+    username: Nikhil
+    password: nikhil
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: Authentication
+  config:
+    import: "optional:configserver:http://localhost:8007/"

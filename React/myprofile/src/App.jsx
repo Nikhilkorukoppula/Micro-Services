@@ -1,5 +1,5 @@
 
-import { Avatar, Box, Button, Grid, TextField, IconButton, Divider } from '@mui/material';
+import { Avatar, Box, Button, Grid, TextField, IconButton, Divider, useIsFocusVisible } from '@mui/material';
 import './App.css';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
@@ -11,11 +11,29 @@ import GoogleIcon from '@mui/icons-material/Google';
 import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import axios from 'axios';
+
 
  function App() {
 
   const [isEditing, setIsEditing] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [status, setStatus] = useState('');
+  const [reason, setReason] = useState('');
   const [fieldValue, setFieldValue] = useState('');
+
+  const handleClick = () => {
+   
+    axios.get('http://localhost:8085api/V1/myprofile/getAll')
+      .then(response => {
+       
+        console.log(response.data);
+      })
+      .catch(error => {
+       
+        console.error(error);
+      });
+    };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -121,10 +139,14 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
       </Box>
  
      <Box className='dive'sx={{ boxShadow: 3 }}>
-       <h3><Button className='button3' style={{marginTop:"30px"}}><h3>Profile</h3></Button></h3> 
+       <Button className='button3' style={{marginTop:"30px"}}  onClick={handleClick}><h3>Profile</h3></Button>
+       {visible &&
+       <p style={{marginTop:"50px"}} onChange={(e)=>{setReason(e.target.reason.value)}}>fdhdfbhgbd</p>
+       }
      </Box > &nbsp;&nbsp;
      <Box className='dive'sx={{ boxShadow: 3 }}>
        <h3><Button className='button3' style={{marginTop:"30px"}}><h3>Experience</h3></Button></h3> 
+
      </Box >
      </Box>
      <Divider orientation="horizontal" flexItem></Divider>

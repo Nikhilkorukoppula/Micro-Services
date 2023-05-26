@@ -11,13 +11,20 @@ spring:
           uri: lb://department
           predicates:
           - Path= /product/**
-
+          filters:
+            - AuthenticationFilter
 
         - id: employee-service
           uri: lb://employee-service
           predicates:
           - Path= /orders/**
+          filters:
+            - AuthenticationFilter
 
+        - id: Authentication
+          uri: lb://Authentication
+          predicates:
+            - Path= /Security/**
 
         - id: service-registry
           uri: http://localhost:8888

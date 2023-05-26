@@ -1,9 +1,9 @@
 
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: nikhil
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/nikhil
+    username: Nikhil
     password: nikhil
   jpa:
     hibernate:
@@ -12,3 +12,44 @@ spring:
      name: employee-service
   config:
      import: "optional:configserver:http://localhost:8007/"
+
+
+
+
+management:
+  health:
+   circuitbreakers:
+    enabled: true
+  endpoints:
+   web:
+    exposure:
+       include: health
+  endpoint:
+   health:
+    show-details: always
+
+
+  #Resilinece4j Properties
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+  timelimiter:
+    instances:
+      inventory:
+        timeoutDuration: 3s
+
+  retry:
+    instances:
+      inventory:
+        maxAttempts: 3
+        waitDuration: 3s

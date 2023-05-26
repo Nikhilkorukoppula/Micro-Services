@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("product/")
+@RequestMapping("/product")
 public class Controller {
 
     @Autowired
@@ -29,7 +29,7 @@ public class Controller {
         return service.add(product);
     }
 
-    @GetMapping("getByName")
+    @GetMapping("/getByName")
     public Product getByName(@RequestParam("name")String name){
         return service.findByName(name);
     }
