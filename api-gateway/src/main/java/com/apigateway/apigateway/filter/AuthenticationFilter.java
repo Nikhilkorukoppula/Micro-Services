@@ -28,7 +28,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 {
                     throw new RuntimeException("missing token");
                 }
-                String authHeader=exchange.getRequest().getHeaders().get(org.springframework.http.HttpHeaders.AUTHORIZATION).get(0);
+                String authHeader=exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
                if(authHeader!=null&&authHeader.startsWith("Bearer ")){
                    authHeader=authHeader.substring(7);
                }

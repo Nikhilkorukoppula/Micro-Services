@@ -1,6 +1,7 @@
 package com.employee.employeeservice.controller;
 
 
+import com.employee.employeeservice.dto.OrdersDto;
 import com.employee.employeeservice.entities.Order;
 
 import com.employee.employeeservice.service.ServiceClass;
@@ -21,7 +22,7 @@ public class ControllerClass {
     private ServiceClass service;
 
     @GetMapping("get")
-    public List<Order> get(){
+    public List<OrdersDto> get(){
         return service.getAll();
     }
 

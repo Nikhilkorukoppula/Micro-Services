@@ -37,4 +37,3 @@ spring:
           uri: http://localhost:8888
           predicates:
             - Path= /eureka/**
-#skdfjsd;kvjdfk;vj

@@ -1,17 +1,26 @@
 package com.authentication.Authentication.controller;
 
+import com.authentication.Authentication.Service.ServiceClass;
+import com.authentication.Authentication.dto.EmailDto;
 import com.authentication.Authentication.entities.LoginDetails;
 import com.authentication.Authentication.repository.LoginRepository;
 import com.authentication.Authentication.token.JavaToken;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.thymeleaf.util.StringUtils;
 
+import javax.print.DocFlavor;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/Security")
@@ -57,4 +66,59 @@ public class MainController {
             throw new BadCredentialsException("Invalid user and password");
         }
     }
+
+    @Autowired
+    private ServiceClass serviceClass;
+
+    @Autowired
+    private LoginRepository repo;
+
+    @PostMapping("sendMail")
+    public String sendEmail(@RequestBody EmailDto emailDto){
+        if(StringUtils.isEmpty(emailDto.getEmail())||StringUtils.isEmpty(emailDto.getSubject())){
+            return "please provide the required details";
+        }
+        else{
+            this.serviceClass.sendMail(emailDto.getEmail(),emailDto.getSubject(),emailDto.getBody());
+        }
+        return "Mail sent successfully";
+    }
+
+    @PostMapping("sendAttachments")
+    public String sendAttachments(@RequestParam String email,
+                                  @RequestParam String subject,
+                                  @RequestParam String body,
+                                  @RequestParam("file") MultipartFile file) throws IOException, MessagingException {
+        if(StringUtils.isEmpty(email)||StringUtils.isEmpty(subject)|| (file==null||file.isEmpty())){
+            return "please provide the required details";
+        }
+        else{
+            byte[] attachmentData = file.getBytes();
+            String attachmentName = file.getOriginalFilename();
+            this.serviceClass.sendAttachments(email,subject,body,attachmentData,attachmentName);
+        }
+        return "Mail sent successfully";
+    }
+
+    @PostMapping("/forgot-mail")
+    public String forgotMail(@RequestBody LoginDetails details) {
+      if(StringUtils.isEmpty(details.getEmail())){
+          return "please provide your mailId";
+      }
+      else{
+
+          LoginDetails details1=new LoginDetails(details.getEmail());
+          String baseUrl="http://localhost:8010/Security/resetPassword";
+          serviceClass.forgotPassword(details.getEmail(),baseUrl);
+      }
+        return "sent successfully";
+    }
+
+    @PutMapping("resetPassword")
+    public String update(@RequestBody LoginDetails loginDetails){
+        LoginDetails details=new LoginDetails();
+        details.setPassword(loginDetails.getPassword());
+        return "Updated";
+    }
+
 }

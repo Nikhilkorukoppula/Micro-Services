@@ -61,7 +61,7 @@ import axios from 'axios';
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+//https://jsonplaceholder.typicode.com/posts
 
   return (
     <div className="App" >
@@ -140,6 +140,8 @@ import axios from 'axios';
  
      <Box className='dive'sx={{ boxShadow: 3 }}>
        <Button className='button3' style={{marginTop:"30px"}}  onClick={handleClick}><h3>Profile</h3></Button>
+
+
        {visible &&
        <p style={{marginTop:"50px"}} onChange={(e)=>{setReason(e.target.reason.value)}}>fdhdfbhgbd</p>
        }

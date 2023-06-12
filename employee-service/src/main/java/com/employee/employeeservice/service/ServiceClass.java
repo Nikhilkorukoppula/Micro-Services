@@ -1,6 +1,6 @@
 package com.employee.employeeservice.service;
 
-import com.employee.employeeservice.config.WebClientConfig;
+import com.employee.employeeservice.dto.OrdersDto;
 import com.employee.employeeservice.entities.Order;
 import com.employee.employeeservice.repository.Repo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,9 @@ public class ServiceClass {
 
     public String add(Order order){
         String oname=order.getName();
-    String name=webClient.get().uri("http://DEPARTMENT/product/getByName?name="+oname)
-                 .retrieve().bodyToMono(String.class).block();
-    if(name!=null){
+        String name = webClient.get().uri("http://DEPARTMENT/product/getByName?name=" + oname)
+                .retrieve().bodyToMono(String.class).block();
+        if(name!=null){
         repo.save(order);
     }
     else{
@@ -30,8 +30,23 @@ public class ServiceClass {
     }
      return "order placed";
     }
-    public List<Order> getAll(){
 
-        return repo.findAll();
+
+
+    public List<OrdersDto> getAll(){
+
+        List<Order> list = repo.findAll();
+        List<OrdersDto>orders=new ArrayList<>();
+        for(Order o:list){
+            OrdersDto dto=new OrdersDto();
+            dto.setId(o.getId());
+            dto.setOrderName(o.getName());
+            dto.setOrderDetails(o.getOderDetails());
+            OrdersDto n =webClient.get().uri("http://DEPARTMENT/product/getByName?name="+o.getName()).retrieve().bodyToMono(OrdersDto.class).block();
+            dto.setPrice(n.getPrice());
+            dto.setDescription(n.getDescription());
+            orders.add(dto);
+        }
+         return orders;
     }
 }
