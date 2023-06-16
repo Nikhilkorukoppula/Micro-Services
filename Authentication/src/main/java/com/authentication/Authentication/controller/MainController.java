@@ -70,34 +70,24 @@ public class MainController {
     @Autowired
     private ServiceClass serviceClass;
 
-    @Autowired
-    private LoginRepository repo;
 
-    @PostMapping("sendMail")
-    public String sendEmail(@RequestBody EmailDto emailDto){
-        if(StringUtils.isEmpty(emailDto.getEmail())||StringUtils.isEmpty(emailDto.getSubject())){
-            return "please provide the required details";
-        }
-        else{
-            this.serviceClass.sendMail(emailDto.getEmail(),emailDto.getSubject(),emailDto.getBody());
-        }
-        return "Mail sent successfully";
-    }
 
-    @PostMapping("sendAttachments")
+    @PostMapping("sendMails")
     public String sendAttachments(@RequestParam String email,
                                   @RequestParam String subject,
                                   @RequestParam String body,
                                   @RequestParam("file") MultipartFile file) throws IOException, MessagingException {
-        if(StringUtils.isEmpty(email)||StringUtils.isEmpty(subject)|| (file==null||file.isEmpty())){
-            return "please provide the required details";
+        if(file.isEmpty()||file==null){
+            this.serviceClass.sendMail(email,subject,body);
+            return "Mail sent successfully";
         }
         else{
             byte[] attachmentData = file.getBytes();
             String attachmentName = file.getOriginalFilename();
             this.serviceClass.sendAttachments(email,subject,body,attachmentData,attachmentName);
+            return "Mail sent successfully with attachments";
         }
-        return "Mail sent successfully";
+
     }
 
     @PostMapping("/forgot-mail")
@@ -107,9 +97,12 @@ public class MainController {
       }
       else{
 
-          LoginDetails details1=new LoginDetails(details.getEmail());
+        /*  LoginDetails details1=new LoginDetails(details.getEmail());
           String baseUrl="http://localhost:8010/Security/resetPassword";
-          serviceClass.forgotPassword(details.getEmail(),baseUrl);
+          serviceClass.forgotPassword(details.getEmail(),baseUrl);*/
+          String password= UUID.randomUUID().toString().substring(0, 8);
+          System.out.println(password);
+          serviceClass.forgotPassword(details.getEmail(), password);
       }
         return "sent successfully";
     }

@@ -11,13 +11,11 @@
         <module name="Authentication" />
         <module name="api-gateway" />
         <module name="department" />
+        <module name="myWebsite" />
         <module name="service-registry" />
         <module name="employee-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="myWebsite" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

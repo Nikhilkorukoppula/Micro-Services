@@ -6,6 +6,6 @@ import com.mywebsite.myWebsite.entities.MyProfile;
 
 public interface MyProfileRepository extends JpaRepository<MyProfile, Integer>{
 	
-	public MyProfile findByDescription(String description);
+	public MyProfile findByName(String name);
 
 }

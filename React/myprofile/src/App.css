@@ -1,17 +1,17 @@
 .App {
   display: flex;
   flex-direction: column;
-  width: 1500px;
+  width: 100%;
   position: relative;
  
 }
 
 .div1{
-  display: flex;
+  display: block;
   width: 1500px;
   background-color: lightgrey;
-  height: 50px;
-  position: sticky;
+  height: 40px;
+ 
 }
 .div{
   display: flex;
@@ -40,12 +40,18 @@
  margin-left: 30px;
 } 
 .dive{
-  display: flex;
+  display: block;
   width: 500px;
   background-color: white;
   height: 300px;
  padding: 10px;
  margin-top: 70px;
+}
+
+.editIcon{
+  padding: 150px;
+  position: bottom;
+  top: 1px;
 }
 .div2{
   display: flex;
@@ -72,42 +78,58 @@
     width: 1000px;
   
 }
+.div-cont1{
+  display: block;
+  top: 0;
+  z-index: 1;
+  background-color: lightgrey;
+}
+
+
 .div-cont{
   display: flex;
   top: 0;
   z-index: 1;
+  background-color: white;
 }
 .Avatar{
   left: 50%;
   margin-bottom: -70px;
   margin-top: 10px;
+  display: block;
 }
+
 .avatar-div{
   width: 100px;
   position: center;
-margin-left: 700px;
+margin-left: 300px;
 margin-top: -70px;
 }
 .avatar-name {
   
   font-size: 16px;
   font-weight: bold;
-  margin-left: 400px;
- 
+  
+margin-top: 50px;
+  margin-left: 75px;
   padding-top: 20px;
-  color: #333;
-  height: 40px;
+  color: black;
+ 
 }
 .footer{
   display: flex;
   justify-content: center;
   align-items: center;
   height: '60px';
-
+  background-color: white;
+    display: flex;
+  top: 0;
+  z-index: 1;
+  background-color: white;
 }
 .avatar-disabled {
   height: 40px;
-  display: flex;
+  display: block;
   align-items: center;
   
 }
