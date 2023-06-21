@@ -3,8 +3,10 @@
   flex-direction: column;
   width: 100%;
   position: relative;
- 
-}
+  /* background-image: url(computer-1867758_1920-min.jpg);
+   */
+  
+ }
 
 .div1{
   display: block;
@@ -23,29 +25,17 @@
 }
 .div4{
   display: flex;
-  width: 500px;
-  background-color: white;
-  height: 310px;
- padding: 10px;
- margin-top: 70px;
- margin-left: 100px;
-}
-.div5 {
-  display: flex;
-  width: 500px;
-  background-color: white;
-  height: 310px;
- padding: 10px;
- margin-top: 70px;
- margin-left: 30px;
-} 
-.dive{
-  display: block;
-  width: 500px;
+  width: 30%;
   background-color: white;
   height: 300px;
- padding: 10px;
- margin-top: 70px;
+ 
+}
+
+.dive{
+  display: flex;
+  width: 30%;
+  background-color: white;
+  height: 300px;
 }
 
 .editIcon{
@@ -79,40 +69,46 @@
   
 }
 .div-cont1{
-  display: block;
+  display: flex;
+  height: 350px;
   top: 0;
   z-index: 1;
-  background-color: lightgrey;
+  background-color: bisque;
 }
 
 
+.div-cont2{
+  display: flex;
+  margin-bottom: 30px;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  height: 40px;
+  background-color:bisque;
+  
+}
 .div-cont{
   display: flex;
   top: 0;
   z-index: 1;
-  background-color: white;
 }
 .Avatar{
-  left: 50%;
-  margin-bottom: -70px;
-  margin-top: 10px;
-  display: block;
+  display: flex;
+  justify-content: center;
+  margin-top: -30px;
 }
 
 .avatar-div{
   width: 100px;
-  position: center;
 margin-left: 300px;
 margin-top: -70px;
 }
 .avatar-name {
-  
+  display: flex;
+  justify-content: center;
+ width: 100px;
   font-size: 16px;
   font-weight: bold;
-  
-margin-top: 50px;
-  margin-left: 75px;
-  padding-top: 20px;
   color: black;
  
 }
@@ -121,15 +117,14 @@ margin-top: 50px;
   justify-content: center;
   align-items: center;
   height: '60px';
-  background-color: white;
-    display: flex;
+  background-color: lightgrey;
+  display: flex;
   top: 0;
   z-index: 1;
-  background-color: white;
 }
 .avatar-disabled {
   height: 40px;
-  display: block;
+  display: flex;
   align-items: center;
   
 }
@@ -146,7 +141,7 @@ margin-top: 50px;
 
 } 
 .button3 {
-   left:60px;
+  display: flex;
  height: 2px
 } 
 
@@ -163,10 +158,9 @@ margin-top: 50px;
 
 .App-header {
   height:300px;
-  background-color: lightgrey;
+  
   display: flex;
   flex-direction: column;
-  color: white;
 }
 
 .App-link {
