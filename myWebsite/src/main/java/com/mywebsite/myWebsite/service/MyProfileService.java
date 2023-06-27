@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.mywebsite.myWebsite.dto.MyProfileDto;
 import com.mywebsite.myWebsite.entities.MyProfile;
 import com.mywebsite.myWebsite.repository.MyProfileRepository;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class MyProfileService {
@@ -68,4 +70,38 @@ public class MyProfileService {
 		return ResponseEntity.ok(map);
 	}
 
+	public ResponseEntity<Map<String,Object>> login(String email,String password) {
+		MyProfile profile = this.myProfileRepository.findByEmailAndPassword(email, password);
+		if (profile != null) {
+			map.put("message", "Login success");
+			map.put("status", HttpStatus.OK.value());
+		} else {
+			map.put("message", "Login failure");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			throw new NullPointerException("no data found");
+
+		}
+		return ResponseEntity.ok(map);
+
+	}
+
+
+	public String  uploadPic(MultipartFile file){
+		String fileExtension= StringUtils.getFilenameExtension(file.getOriginalFilename());
+		List<String> extensions=new ArrayList<>();
+		extensions.add(".jpg");
+		extensions.add(".jpeg");
+		extensions.add(".png");
+
+		if(!extensions.contains(fileExtension)){
+			return "please provide valid image";
+		}
+		else{
+			String fileName= "ProfilePic.jpg"  ;
+			MyProfile profile=new MyProfile();
+			profile.setProfile(fileName);
+			this.myProfileRepository.save(profile);
+		}
+            return "Upload success";
+	}
 }

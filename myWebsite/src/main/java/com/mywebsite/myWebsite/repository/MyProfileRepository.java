@@ -8,4 +8,5 @@ public interface MyProfileRepository extends JpaRepository<MyProfile, Integer>{
 	
 	public MyProfile findByName(String name);
 
+    MyProfile findByEmailAndPassword(String email, String password);
 }

@@ -31,8 +31,8 @@ public class MyProfile {
 	private int age;
 	private long contactNo;
 	private String address;
-
-	
+    private String password;
+    private  String profile;
 	
 	
 }

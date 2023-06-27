@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.mywebsite.myWebsite.entities.MyProfile;
 import com.mywebsite.myWebsite.service.MyProfileService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -21,6 +22,16 @@ public class MyProfileController {
 	@PostMapping("add")
 	public ResponseEntity<Map<String,Object>> add(@RequestBody MyProfile myProfile){
 		return myProfileService.add(myProfile);
+	}
+
+	@PostMapping("login")
+	public ResponseEntity<Map<String,Object>> login(@RequestParam String email,@RequestParam String password){
+		return myProfileService.login(email,password);
+	}
+
+	@PostMapping("uploadPic")
+	public String uploadPic(@RequestParam("file")MultipartFile file){
+		return myProfileService.uploadPic(file);
 	}
 	@PutMapping("update")
 	public ResponseEntity<Map<String,Object>> update(@RequestParam String name,
