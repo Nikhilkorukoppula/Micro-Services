@@ -2,11 +2,7 @@ package com.mywebsite.myWebsite.entities;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +16,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MyProfile {
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -33,6 +28,6 @@ public class MyProfile {
 	private String address;
     private String password;
     private  String profile;
-	
+
 	
 }

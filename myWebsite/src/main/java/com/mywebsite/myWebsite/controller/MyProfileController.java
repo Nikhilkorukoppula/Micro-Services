@@ -1,8 +1,10 @@
 package com.mywebsite.myWebsite.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +31,15 @@ public class MyProfileController {
 		return myProfileService.login(email,password);
 	}
 
-	@PostMapping("uploadPic")
-	public String uploadPic(@RequestParam("file")MultipartFile file){
-		return myProfileService.uploadPic(file);
+	@PutMapping("uploadPic/{name}")
+	public ResponseEntity<Map<String, Object>> uploadPic(@PathVariable("name") String name,
+														 @RequestParam("file")MultipartFile file) throws IOException {
+		return myProfileService.uploadPic(file,name);
+	}
+
+	@GetMapping("getPic/{name}")
+	public Resource getPic(@PathVariable("name") String name) throws IOException {
+		return myProfileService.getPic(name);
 	}
 	@PutMapping("update")
 	public ResponseEntity<Map<String,Object>> update(@RequestParam String name,

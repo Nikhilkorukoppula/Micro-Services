@@ -1,12 +1,18 @@
 package com.mywebsite.myWebsite.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.MalformedURLException;
+import java.nio.file.*;
+import java.nio.file.attribute.FileAttribute;
+import java.util.*;
+import java.util.concurrent.ForkJoinPool;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,12 @@ public class MyProfileService {
 
 	@Autowired
 	private MyProfileRepository myProfileRepository;
+
+	@Value("${files.storage}")
+	public String folderLocation;
+
+	//private final Path root = Paths.get(folderLocation);
+
 
 	public ResponseEntity<Map<String,Object>> add(MyProfile myProfile){
 		this.myProfileRepository.save(myProfile);
@@ -60,6 +72,7 @@ public class MyProfileService {
 			dto.setDescription(myprofile.getDescription());
 			dto.setDateOfBirth(myprofile.getDateOfBirth());
 			dto.setContactNo(myprofile.getContactNo());
+
 			list.add(dto);
 		});
 
@@ -86,22 +99,65 @@ public class MyProfileService {
 	}
 
 
-	public String  uploadPic(MultipartFile file){
-		String fileExtension= StringUtils.getFilenameExtension(file.getOriginalFilename());
-		List<String> extensions=new ArrayList<>();
-		extensions.add(".jpg");
-		extensions.add(".jpeg");
-		extensions.add(".png");
+	public ResponseEntity<Map<String,Object>>  uploadPic(MultipartFile file,String name) {
+		MyProfile myProfile=myProfileRepository.findByName(name);
+		if(myProfile!=null) {
+			String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+			System.out.println(fileExtension);
+			List<String> extensions = new ArrayList<>();
+			extensions.add("jpg");
+			extensions.add("jpeg");
+			extensions.add("png");
+			try {
+				if (!extensions.contains(fileExtension)) {
+					map.put("message", "error");
+					map.put("status", HttpStatus.BAD_REQUEST.value());
 
-		if(!extensions.contains(fileExtension)){
-			return "please provide valid image";
+					throw new RuntimeException("please provide valid image");
+				}
+				else{
+					String fileName = name+".jpg";
+					Files.copy(file.getInputStream(),
+							Paths.get(folderLocation).resolve(fileName),StandardCopyOption.REPLACE_EXISTING);
+					myProfile.setProfile(fileName);
+					this.myProfileRepository.save(myProfile);
+					map.put("message", "ProfilePic Uploaded successfully");
+					map.put("status", HttpStatus.OK.value());
+
+				}
+			}
+			 catch (IOException e) {
+				 System.out.println("exception occurred");
+				 if (e instanceof FileAlreadyExistsException) {
+					 throw new RuntimeException("A file of that name already exists.");
+				 }
+				 throw new RuntimeException(e.getMessage());
+			}
+
+
 		}
 		else{
-			String fileName= "ProfilePic.jpg"  ;
-			MyProfile profile=new MyProfile();
-			profile.setProfile(fileName);
-			this.myProfileRepository.save(profile);
+			map.put("message", "error");
+			map.put("status", HttpStatus.BAD_REQUEST.value());
+			throw  new NullPointerException("User not found");
 		}
-            return "Upload success";
+		return ResponseEntity.ok(map);
+	}
+
+	public Resource getPic(String name){
+		MyProfile myProfile=myProfileRepository.findByName(name);
+		String fileName=myProfile.getProfile();
+		try {
+			Path file = Paths.get(folderLocation).resolve(fileName);
+			Resource resource =  new UrlResource(file.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				return resource;
+			} else {
+				throw new RuntimeException("Could not read the file!");
+			}
+		}
+		catch (MalformedURLException e) {
+			throw new RuntimeException("Error: " + e.getMessage());
+		}
 	}
 }

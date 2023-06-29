@@ -16,7 +16,7 @@ function Homepage(){
 
     const handleClick= async ()=> {
         const queryParams= `email=${email}&password=${password}`;
-        await axios.post(`http://192.168.2.96:8085/api/V1/myprofile/login?${queryParams}`).then((res)=>{
+        await axios.post(`http://localhost:8085/api/V1/myprofile/login?${queryParams}`).then((res)=>{
             console.log(res.status)
             if(res.status===200){
           navigate('/homepage/profile')
@@ -40,8 +40,8 @@ function Homepage(){
   <Box className='homepage'  sx={{ justifyContent:'center',
                                     justifyitems:'center',
                                     display:'flex' }}  item xs={12}>
-                 <Box className='main-div'sx={{ justifyContent:'center',
-                                                boxShadow: '20',
+                 <Box className='main-div' elevation={'20'} sx={{ justifyContent:'center',
+                                                boxShadow:'20',
                                                 borderRadius:['10px'],
                                                 justifyitems:'center',
                                                 display:'flex' }}  item xs={12}>

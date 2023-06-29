@@ -104,6 +104,7 @@
     display: flex;
     justify-content: center;
     margin-top: -30px;
+    overflow: hidden;
   }
   
   .avatar-div{
@@ -152,6 +153,50 @@
    height: 2px
   } 
   
+  .my_file{
+    position: relative;
+    bottom: 0;
+    outline: none;
+    color: transparent;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.5s;
+    background: rgba(0,0,0,0 .5);
+    opacity: 0;
+  
+  }
+  .my_file::-webkit-file-upload-button{
+    visibility: hidden;
+  }
+  .my_file::before{
+    visibility: visible;
+    background-color: aliceblue;
+    content:'\f030';
+    font-family:'Font Awesome';
+    font-size: 35px;
+    margin-left: 40px;
+    color: #3284fe;
+    display: inline-flex;
+    /* -webkit-user-select:none; */
+  }
+  .my_file::after{
+    content:'Upload';
+    background-color: white;
+    font-family: 'arial';
+    font-weight: bold;
+    color: green;
+    display: flex;
+    font-size: 12px;
+    position: relative;
+    
+  
+    float: left;
+  
+  }
+  .my_file:hover{
+    opacity: 1;
+  }
   .App-logo {
     height: 40vmin;
     pointer-events: none;

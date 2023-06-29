@@ -11,7 +11,7 @@ import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import axios from 'axios';
-import CreateIcon from '@mui/icons-material/Create';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
 
  function Profile() {
@@ -31,7 +31,7 @@ import CreateIcon from '@mui/icons-material/Create';
   const handleClick = async () => {
    
     
-      await axios.get('http://192.168.2.96:8085/api/V1/myprofile/getAll').then((res)=>{
+      await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
           setData2(res.data.result)
@@ -50,7 +50,7 @@ import CreateIcon from '@mui/icons-material/Create';
      }
   
      const handleClick1 = async () => {
-      await axios.get('http://192.168.2.96:8085/api/V1/myprofile/getAll').then((res)=>{
+      await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
           setData1(res.data.result)
@@ -68,52 +68,30 @@ import CreateIcon from '@mui/icons-material/Create';
     
      }
 
-     const handleInputChange = (e, item) => {
-      const updatedData = {editedData, [item.id]: e.target.value };
-      setEditedData(updatedData);
-    };
-  
-    const handleEdit = (item) => {
-      setEditMode(true);
-      setEditedData({editedData, [item.id]: item.description });
-    };
-  
+     const getPic='http://localhost:8085/api/V1/myprofile/getPic/nikki'
+     const [profileImage, setProfileImage] = useState('');
+    const handleProfileChange = (file) => {
+      let form =new FormData()  //for uploading mulitpart file 
+      form.append("file",file.target.files[0]) 
+   
 
-    const handleUpdate = (item) => {
-      //Perform the update request to the backend using editedData
-      //Example:
-      const queryParams = `name=${item.name}&description=${editedData[item.id]}`;
-      axios.put(`http://192.168.2.96:8085/api/V1/myprofile/update?${queryParams}`)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((error) => {
-        console.error("error")
-        });
-  
-      setEditMode(false);
-    
-
-    setTimeout(() => {
-      // Update the data1 state with the new description value
-      setData1((prevData) => {
-        return prevData.map((dataItem) => {
-          if (dataItem.id === item.id) {
-            return { ...dataItem, description: editedData[item.id] };
-          }
-          return dataItem;
-        });
+    axios({ //it is used to call the service to conmplt the operation(upload)
+      method: "put",
+      url: `http://localhost:8085/api/V1/myprofile/uploadPic/nikki?`,
+      data: form,
+      headers: { "Content-Type": 'multipart/form-data'},
+    })
+      .then((response) => {
+        console.log(response.data);
+        
+        if(response.status===200){
+          window.location.reload()
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    });
   };
-
-    const handleItemMouseEnter = (item) => {
-      setHoveredItem(item);
-    };
-  
-    const handleItemMouseLeave = () => {
-      setHoveredItem(null);
-    };
 
      const scrollToAbout = () => {
        aboutRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -184,16 +162,25 @@ import CreateIcon from '@mui/icons-material/Create';
               
       
           {showAvatar && (
-          <Avatar  className='Avatar'  style={{ width: '100px', height: '100px' }} alt="" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtPwScKQmgy9AjFzs-UtTegpOjcDe02u5Yrw&usqp=CAU"/> 
+          <Avatar item  xs={12}  className='Avatar'
+          style={{backgroundImage:`url(${getPic})`, width: '120px', height: '120px'}}
+         >
+          <form enctype="multipart/form-data" >
+         <input  type='file' className='my_file' onChange={handleProfileChange} />
          
+        
+         </form>
+        </Avatar> 
+        
         )}
+         
         {!showAvatar && (
         
          <p className='avatar-name'>Nikhil <br></br>
           <br></br></p> 
              )}
           
-             
+        
              
         </Box>
         </Box>
