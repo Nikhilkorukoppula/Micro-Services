@@ -3,14 +3,16 @@ import * as React from 'react';
 import Profile from './pages/profile/profile'
 import { Route,Routes } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-import Homepage from './pages/homepage/homepage';
+import Login from './pages/login/login';
 
  function App() {
        return(
+        
         <BrowserRouter>
         <Routes>
-          <Route path='/homepage' element={<Homepage/>}/>
-          <Route path='/homepage/profile' element={<Profile/>}/>
+          
+          <Route path='/login' element={<Login/>}/>
+          <Route path='/profile' element={<Profile/>}/>
         </Routes>
         </BrowserRouter>
 

@@ -1,88 +1,71 @@
-import * as React from 'react';
+import React from "react";
+import InputBase from '@mui/material/InputBase';
+import { styled, alpha } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+import { Box } from "@mui/system";
 import './homepage.css';
-import { Avatar, Box,Grid, Button, TextField} from '@mui/material';
-import LoginIcon from '@mui/icons-material/Login';
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect , useRef} from 'react';
 
 
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: 'white',
+    marginLeft: 0,
+    width: '25%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(1),
+      width: '25%',
+    },
+  }));
 
-function Homepage(){
 
-  const navigate= useNavigate();
-  const [email,setEmail]=useState();
-  const [password,setPassword]=useState();
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    float:'right',
+  }));
+ 
+  
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'black',
+    '& .MuiInputBase-input': {
+      padding: theme.spacing(1, 1, 1, 0),
+      paddingLeft: `calc(1em + ${theme.spacing(0)})`,
+      transition: theme.transitions.create('width'),
+      
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        width: '20ch',
+        '&:focus': {
+          width: '20ch',
+        },
+      },
+      
+    },
+    
+  }));
 
-    const handleClick= async ()=> {
-        const queryParams= `email=${email}&password=${password}`;
-        await axios.post(`http://localhost:8085/api/V1/myprofile/login?${queryParams}`).then((res)=>{
-            console.log(res.status)
-            if(res.status===200){
-          navigate('/homepage/profile')
-            }
-            else if(res.status===500){
-                console.error('error occured')
-                 navigate('/homepage')
-              
-            }
-        })
-    }
+function Homepage () {
 
-    const handleEmail =(e)=>{
-    setEmail(e.target.value)
-    }
-    const handlePassword =(e)=>{
-        setPassword(e.target.value)
-        }
-
-    return(
-  <Box className='homepage'  sx={{ justifyContent:'center',
+return (
+<div className="main-div" sx={{ justifyContent:'center',
                                     justifyitems:'center',
                                     display:'flex' }}  item xs={12}>
-                 <Box className='main-div' elevation={'20'} sx={{ justifyContent:'center',
-                                                boxShadow:'20',
-                                                borderRadius:['10px'],
-                                                justifyitems:'center',
-                                                display:'flex' }}  item xs={12}>
-                
-                        <Box className='inside-div' bgcolor={'white'}item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center',
-                                                display:'flex' }} >
-                            
-                                <Grid marginTop={'80px'} item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center' }}>
-                                <h3>Login</h3>
-                                <TextField id="filled-basic" label="Email" variant="filled" type="email" onChange={handleEmail}/> <br></br>
-                                <TextField id="filled-basic" label="Password" variant="filled" type="password" onChange={handlePassword} /><br></br><br></br>
-                                <Grid textAlign={'justify'}>
-                                <a href=''>forgot password</a><br></br><br></br>
-                                <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick}>
-                                         Login
-                                </Button>
-                                </Grid>
-                                </Grid>
-                              
-                              
-                        </Box> 
-                        <Box className='inside-div' bgcolor={'bisque'} item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center',
-                                                display:'flex' }} >
-                           <p > <h2><i>WELCOME</i></h2> <br></br><br></br>
-                           <h4>Everything around you that you call life was made up by people that were no smarter than you. 
-                                And you can change it, you can influence it… Once you learn that, you'll never be the same again.
-                                </h4></p>
-                        </Box>
-                       
-                </Box>
-                
+                        <h1 className="div" sx={{ justifyContent:'center',
+                                    justifyitems:'center',
+                                    display:'flex' }}  item xs={12}>
 
-  </Box>
+                            A Greate Profile Perfectly Defines What You Are.!
+                             
+                        </h1>
 
-    );
+</div>
+);
+
 };
-
 export default Homepage;

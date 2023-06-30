@@ -73,7 +73,7 @@
     height: 350px;
     top: 0;
     z-index: 1;
-    background-color: bisque;
+    background-color: white;
   }
   
   
@@ -84,7 +84,7 @@
     z-index: 1;
     width: 100%;
     height: 40px;
-    background-color:bisque;
+    background-color:beige;
     
   }
   .div-cont{
@@ -160,7 +160,6 @@
     color: transparent;
     width: 100%;
     box-sizing: border-box;
-    cursor: pointer;
     transition: 0.5s;
     background: rgba(0,0,0,0 .5);
     opacity: 0;
@@ -170,18 +169,19 @@
     visibility: hidden;
   }
   .my_file::before{
-    visibility: visible;
-    background-color: aliceblue;
+    visibility: hidden;
     content:'\f030';
-    font-family:'Font Awesome';
+    font-family:fontAwesome;
     font-size: 35px;
-    margin-left: 40px;
+  float: right;
+  margin-right: 16px;
     color: #3284fe;
     display: inline-flex;
     /* -webkit-user-select:none; */
   }
   .my_file::after{
-    content:'Upload';
+    visibility: hidden;
+    content:'icon';
     background-color: white;
     font-family: 'arial';
     font-weight: bold;
@@ -189,8 +189,6 @@
     display: flex;
     font-size: 12px;
     position: relative;
-    
-  
     float: left;
   
   }
@@ -211,6 +209,7 @@
   .App-header {
     height:400px;
     display: flex;
+    margin-top: 20px;
     flex-direction: column;
   }
   

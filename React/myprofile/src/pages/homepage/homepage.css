@@ -1,24 +1,16 @@
-.homepage{
+.div{
+    z-index: 1;
+   margin-left: 400px;
+   background-color: transparent;
+}
+
+.main-div {
+    display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
     position: relative;
-    align-items: center;
-    background-image: url('computer.jpg');
+    background-color: cadetblue;
+    /* background-image: url(computer-1867758_1920-min.jpg);
+     */
     
-}
-
-.main-div{
-    width: 45%;
-    height: 500px;
-    z-index: 1;
-    background-color: lightgray;
-
-  .inside-div{
-        width: 50%;
-        height: 450px;
-        margin-top: 30px;
-        display: flex;
-        text-align: center;
-    }
-}
+   }

@@ -1,9 +1,8 @@
 
-import { Avatar, Box,Grid, Button, TextField} from '@mui/material';
+import { Avatar, Box,Grid, Button} from '@mui/material';
 import './profile.css';  
 import * as React from 'react';
 import { useState, useEffect , useRef} from 'react';
-import CheckIcon from '@mui/icons-material/Check';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -12,44 +11,53 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import axios from 'axios';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
-
+import DrawerAppBar from '../../navbar/navbar';
 
  function Profile() {
 
  
   const [data2, setData2] = useState();
   const [data1, setData1] = useState();
-  const [editedData, setEditedData] = useState({});
-  const [editMode, setEditMode] = useState(false);
   const [visible, setVisible] = useState(false);
   const [visible1, setVisible1] = useState(false);
   const aboutRef = useRef(null);
   const [scrollCount, setScrollCount] = useState(0);
   const [showAvatar, setShowAvatar] = useState(true);
-  const [hoveredItem, setHoveredItem] = useState(null);
-
-  const handleClick = async () => {
+  const [hoveredItem, setHoveredItem] = useState(false); 
+  
+  const handleMouseEnter = () => {
+    setHoveredItem(true);
+  };
+  
+  const handleMouseLeave = () => {
+    setHoveredItem(false);
+  }
+  const handleClick = async () => { 
    
-    
       await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
           setData2(res.data.result)
+          
           setVisible(!visible);
         }
         else{
          console.error(res.message)
-  
+         setVisible(visible);
         }
        
       }).catch((error)=>{
         console.error("Error data not found",error)
      
        })
-    
+      
      }
   
+    
+
      const handleClick1 = async () => {
+      
+     
       await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
@@ -67,9 +75,16 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
        })
     
      }
+    
+    
+     const fileInputRef = useRef(null);
+
+const handleUploadButtonClick = () => {
+  fileInputRef.current.click();
+};
 
      const getPic='http://localhost:8085/api/V1/myprofile/getPic/nikki'
-     const [profileImage, setProfileImage] = useState('');
+    
     const handleProfileChange = (file) => {
       let form =new FormData()  //for uploading mulitpart file 
       form.append("file",file.target.files[0]) 
@@ -93,9 +108,9 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
       });
   };
 
-     const scrollToAbout = () => {
-       aboutRef.current.scrollIntoView({ behavior: 'smooth' });
-     };
+    //  const scrollToAbout = () => {
+    //    aboutRef.current.scrollIntoView({ behavior: 'smooth' });
+    //  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -130,16 +145,18 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
     sx={{ justifyContent:'center',
            justifyitems:'center',
            display:'flex' }}  >
+             <DrawerAppBar aboutRef={aboutRef}/>
+           
       <header className="App-header">
             <img style={{position:'fixed'}} width='100%' height='100%' 
-            src={require('./computer.jpg')}>
+            src={require('./computer.jpg')} alt='deleted'> 
         </img>       
         <div className='fixed'
       sx={{ justifyContent:'center',
       justifyitems:'center',
       display:'flex' }}  item xs={12}>
              <Button style={{color:'black'}}>Home</Button>
-             <Button color="primary" onClick={scrollToAbout}>About</Button>
+            
              <Button color="secondary">Resume</Button>
              <Button >LogOut</Button>
       </div>
@@ -147,7 +164,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
       <Box className='div-cont'   sx={{ justifyContent:'center',
            justifyitems:'center',
            display:'flex' }}  item xs={12}>
-      <Box width={'100%'} bgcolor={'bisque'} height={'90px'} item xs={12}
+      <Box width={'100%'} bgcolor={'white'} height={'90px'} item xs={12}
          sx={{ justifyContent:'center',
          justifyitems:'center',
          display:'flex' }} >
@@ -158,16 +175,25 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
            sx={{
             boxShadow: 10, justifyContent:'center',
            justifyitems:'center',
-           display:'flex' }} >
+           display:'flex' ,transition:'opacity 0.5s'}} >
               
       
           {showAvatar && (
           <Avatar item  xs={12}  className='Avatar'
-          style={{backgroundImage:`url(${getPic})`, width: '120px', height: '120px'}}
+          sx={{transition:'opacity 1s'}}
+          style={{backgroundImage:`url(${getPic})`, width: '100px', height: '100px'}}
          >
           <form enctype="multipart/form-data" >
-         <input  type='file' className='my_file' onChange={handleProfileChange} />
-         
+         <input  type='file' className='my_file' onChange={handleProfileChange}  ref={fileInputRef}/>
+
+           <CameraAltIcon style={{marginLeft:'45px', opacity: hoveredItem ? 1 : 0, transition:'1s'}}  
+           onMouseEnter={handleMouseEnter}
+           onMouseLeave={handleMouseLeave} 
+           onClick={handleUploadButtonClick}
+         >
+          
+           </CameraAltIcon>
+
         
          </form>
         </Avatar> 
@@ -218,12 +244,12 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 
        <Grid textAlign={'center'} item xs={12}> 
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}
-       onClick={handleClick}  item xs={12}  ><h3 item xs={12}   >Profile</h3>
+       onClick={handleClick}  item xs={12}  ><h3 item xs={12} >Profile</h3>
       </Button>
-   
-        <Grid  textAlign={'justify'} item xs={12}>
+    
+        <Grid  textAlign={'justify'} item xs={12} >
             {visible &&data2.map((item) => (
-                 <h4>Name: {item.name} <br />
+                 <h4 style={{fontFamily:'initial', fontStyle:'oblique',color:'darkcyan'}}>Name: {item.name} <br />
                 Email: {item.email} <br />
                  Contact No: {item.contactNo} <br />
                  Age: {item.age} <br />
@@ -231,8 +257,8 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
             ))}
                </Grid>
         </Grid>
-    
      </Box > &nbsp;&nbsp;
+    
     
      <Box className='dive' sx={{ boxShadow: 3,
          justifyContent:'center',
