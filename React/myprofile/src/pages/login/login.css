@@ -22,3 +22,11 @@
         text-align: center;
     }
 }
+
+.profile{
+    align-items: center;
+    margin-left: 500px;
+    width: 100px;
+    justify-content: center;
+    justify-items: center;
+}

@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 
 
+import com.mywebsite.myWebsite.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -38,8 +39,9 @@ public class MyProfileService {
 
 	public ResponseEntity<Map<String,Object>> add(MyProfile myProfile){
 		this.myProfileRepository.save(myProfile);
-		map.put("message", "submitted");
-		map.put("status", HttpStatus.OK.value());
+			map.put("message", "submitted");
+			map.put("status", HttpStatus.OK.value());
+
 		return ResponseEntity.ok(map);
 	}
 
@@ -67,7 +69,7 @@ public class MyProfileService {
 			MyProfileDto  dto=new MyProfileDto();
 			dto.setName(myprofile.getName());
 			dto.setEmail(myprofile.getEmail());
-			dto.setAge(myprofile.getAge());
+			dto.setGender(myprofile.getGender());
 			dto.setAddress(myprofile.getAddress());
 			dto.setDescription(myprofile.getDescription());
 			dto.setDateOfBirth(myprofile.getDateOfBirth());
@@ -83,15 +85,13 @@ public class MyProfileService {
 		return ResponseEntity.ok(map);
 	}
 
-	public ResponseEntity<Map<String,Object>> login(String email,String password) {
+	public ResponseEntity<Map<String,Object>> login(String email,String password) throws UserNotFoundException {
 		MyProfile profile = this.myProfileRepository.findByEmailAndPassword(email, password);
 		if (profile != null) {
 			map.put("message", "Login success");
 			map.put("status", HttpStatus.OK.value());
 		} else {
-			map.put("message", "Login failure");
-			map.put("status", HttpStatus.NOT_FOUND.value());
-			throw new NullPointerException("no data found");
+			throw new UserNotFoundException("User Not Found");
 
 		}
 		return ResponseEntity.ok(map);

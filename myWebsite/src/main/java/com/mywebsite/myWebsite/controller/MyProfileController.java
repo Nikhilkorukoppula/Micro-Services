@@ -3,6 +3,7 @@ package com.mywebsite.myWebsite.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import com.mywebsite.myWebsite.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class MyProfileController {
 	}
 
 	@PostMapping("login")
-	public ResponseEntity<Map<String,Object>> login(@RequestParam String email,@RequestParam String password){
+	public ResponseEntity<Map<String,Object>> login(@RequestParam String email,@RequestParam String password) throws UserNotFoundException {
 		return myProfileService.login(email,password);
 	}
 

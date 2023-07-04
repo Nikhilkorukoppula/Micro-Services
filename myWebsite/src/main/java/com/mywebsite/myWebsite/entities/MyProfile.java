@@ -23,7 +23,7 @@ public class MyProfile {
 	private String description;
 	private String email;
 	private LocalDate dateOfBirth;
-	private int age;
+	private String gender;
 	private long contactNo;
 	private String address;
     private String password;

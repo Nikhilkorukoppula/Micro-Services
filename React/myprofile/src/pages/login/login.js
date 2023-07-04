@@ -3,9 +3,11 @@ import './login.css';
 import { Box,Grid, Button, TextField} from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect , useRef} from 'react';
-
+import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
 
 
 function Login(){
@@ -13,7 +15,7 @@ function Login(){
   const navigate= useNavigate();
   const [email,setEmail]=useState();
   const [password,setPassword]=useState();
-
+  const[isLoading,setIsloading]=useState(false);
   const loginButtonRef = useRef();
 
   useEffect(() => {
@@ -31,18 +33,40 @@ function Login(){
     };
   }, []);
     const handleClick= async ()=> {
+      setIsloading(true)
         const queryParams= `email=${email}&password=${password}`;
         await axios.post(`http://localhost:8085/api/V1/myprofile/login?${queryParams}`).then((res)=>{
-            console.log(res.status)
+            console.log(res)
             if(res.status===200){
+          setIsloading(false)
+            Swal.fire({ width:"400px",
+		                  title: "Login Success",
+	                  	text: "redirecting please wait",
+                      timer:"1000",
+	                   });
           navigate('/profile')
             }
-            else if(res.status===500){
-                console.error('error occured')
+            else if(res.status===404){
+              setIsloading(false)
+              Swal.fire({ width:"400px",
+              title: "Login Failure",
+              text: "",
+              timer:"1000",
+             });
+                console.error(res.data)
                  navigate('/login')
               
             }
-        })
+        }).catch(error => {
+          setIsloading(false)
+          Swal.fire({ width:"400px",
+              title: "Login Failure",
+              text: "Username or Password invalid",
+             
+             });
+
+      })
+
     }
 
     const handleEmail =(e)=>{
@@ -52,11 +76,20 @@ function Login(){
         setPassword(e.target.value)
         }
 
+       
+          const [isOpen, setIsOpen] = useState(false);
+        
+          const toggleModal = () => {
+            setIsOpen(!isOpen);
+          };
+        
+
     return(
   <Box className='homepage'  sx={{ justifyContent:'center',
                                     justifyitems:'center',
                                     display:'flex' }}  item xs={12}>
-                                      
+                                   
+       
                  <Box className='main-div' elevation={'20'} sx={{ justifyContent:'center',
                                                 boxShadow:'20',
                                                 borderRadius:['10px'],
@@ -66,13 +99,15 @@ function Login(){
                         <Box className='inside-div' bgcolor={'white'}item xs={12}
                                                 sx={{ justifyContent:'center',
                                                 justifyitems:'center',
-                                                display:'flex' }} >
+                                                display:'block' }} >
                             
                                 <Grid marginTop={'30px'} item xs={12}
                                                 sx={{ justifyContent:'center',
                                                 justifyitems:'center' }}>
                                 <h3>Login</h3>
-                                <h4>Don't you have Account.? <a href=''>Click here</a></h4>
+                                <h4>Don't you have Account.? 
+            <Link to='createProfile' style={{fontFamily:'arial',fontStyle:'oblique'}}>Click here</Link>
+            </h4> 
                                 <TextField id="filled-basic" label="Email" variant="filled" type="email" onChange={handleEmail}/> <br></br>
                                 <TextField id="filled-basic" label="Password" variant="filled" type="password" onChange={handlePassword} /><br></br><br></br>
                                 <Grid textAlign={'justify'}>
