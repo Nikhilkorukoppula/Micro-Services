@@ -17,7 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.Arrays;
 
 @EnableMethodSecurity
 @Configuration
@@ -30,9 +35,9 @@ public class SecurityClass {
 
      @Bean
      SecurityFilterChain http(HttpSecurity httpSecurity) throws Exception{
-         return httpSecurity.csrf().disable()
+         return httpSecurity.csrf().disable().cors().configurationSource(corsConfigurationSource()).and()
                  .authorizeHttpRequests()
-                 .requestMatchers("").permitAll()
+                 .requestMatchers("api/V1/myprofile/login","api/V1/myprofile/add","api/V1/myprofile/forgot-mail").permitAll()
                  .anyRequest()
                  .authenticated()
                  .and().sessionManagement()
@@ -43,6 +48,17 @@ public class SecurityClass {
                  .build();
      }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*")); // Allow requests from all origins
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","OPTIONS")); // Allowed HTTP methods
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Allowed
+//	configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply the configuration to all paths
+        return source;
+    }
 
 
 
@@ -51,6 +67,7 @@ public class SecurityClass {
          DaoAuthenticationProvider dao=new DaoAuthenticationProvider ();
          dao.setUserDetailsService(detailsService());
          dao.setPasswordEncoder(encoder());
+        System.out.println("4th step");
          return dao;
     }
 
@@ -61,11 +78,13 @@ public class SecurityClass {
 
     @Bean
     public UserDetailsService detailsService(){
+        System.out.println("initialized");
          return new LoginDetailsService();
     }
 
     @Bean
     public AuthenticationManager manager(AuthenticationConfiguration configuration) throws Exception {
+        System.out.println("3rd step");
         return configuration.getAuthenticationManager();
     }
 }

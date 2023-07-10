@@ -12,10 +12,13 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import axios from 'axios';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DrawerAppBar from '../../navbar/navbar';
+import { Navigate, useNavigate } from 'react-router-dom';
+import UserDetails from './Details';
+import Details from './Details';
 
  function Profile() {
 
- 
+  // const token = sessionStorage.getItem("token")
   const [data2, setData2] = useState();
   const [data1, setData1] = useState();
   const [visible, setVisible] = useState(false);
@@ -32,26 +35,42 @@ import DrawerAppBar from '../../navbar/navbar';
   const handleMouseLeave = () => {
     setHoveredItem(false);
   }
-  const handleClick = async () => { 
+  const interceptor = (request) => { 
+    const token = sessionStorage.getItem("token");
    
-      await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
-        console.log(res.data.result)
-        if(res.status===200){
-          setData2(res.data.result)
-          
-          setVisible(!visible);
-        }
-        else{
-         console.error(res.message)
-         setVisible(visible);
-        }
-       
-      }).catch((error)=>{
-        console.error("Error data not found",error)
-     
-       })
-      
-     }
+    if (!token) {
+      throw new Error("JWT token not found");
+    }
+   
+    request.headers.Authorization= `Bearer ${token}`;
+   
+    return request;
+  };
+
+    const jwt=axios.interceptors.request.use(interceptor);
+ 
+
+
+  const handleClick = async () => {
+    try{
+     await axios.get('http://localhost:8085/api/V1/myprofile/getAll',jwt).then((response)=>{
+ 
+      if (response.status === 200) {
+        console.log(response.data.result);
+        setData2(response.data.result);
+        setVisible(!visible);
+      } else if (response.status === 403) {
+        console.error(response.data.message);
+        setVisible(visible);
+      }
+  })
+}
+    catch(error){
+  console.error(error);
+    }
+  };
+  
+
   
     
 
@@ -246,14 +265,16 @@ const handleUploadButtonClick = () => {
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}
        onClick={handleClick}  item xs={12}  ><h3 item xs={12} >Profile</h3>
       </Button>
-    
+      
         <Grid  textAlign={'justify'} item xs={12} >
             {visible &&data2.map((item) => (
-                 <h4 style={{fontFamily:'initial', fontStyle:'oblique',color:'darkcyan'}}>Name: {item.name} <br />
+                 <h4 style={{fontFamily:'initial', fontStyle:'oblique',color:'darkcyan',fontSize:'20px'}}>
+                  Name: {item.name} <br />
                 Email: {item.email} <br />
                  Contact No: {item.contactNo} <br />
-                 Age: {item.age} <br />
+                 Gender: {item.gender} <br />
                  DOB: {item.dateOfBirth}</h4>
+                
             ))}
                </Grid>
         </Grid>

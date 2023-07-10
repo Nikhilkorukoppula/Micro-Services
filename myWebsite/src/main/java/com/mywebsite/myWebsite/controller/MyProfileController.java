@@ -1,12 +1,22 @@
 package com.mywebsite.myWebsite.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.mywebsite.myWebsite.exception.UserNotFoundException;
+import com.mywebsite.myWebsite.security.token.JavaToken;
+import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import com.mywebsite.myWebsite.entities.MyProfile;
@@ -21,6 +31,12 @@ public class MyProfileController {
 	
 	@Autowired
 	private MyProfileService myProfileService;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private JavaToken token;
 	
 	@PostMapping("add")
 	public ResponseEntity<Map<String,Object>> add(@RequestBody MyProfile myProfile){
@@ -28,8 +44,27 @@ public class MyProfileController {
 	}
 
 	@PostMapping("login")
-	public ResponseEntity<Map<String,Object>> login(@RequestParam String email,@RequestParam String password) throws UserNotFoundException {
-		return myProfileService.login(email,password);
+	public ResponseEntity<Map<String,Object>> login(@RequestBody MyProfile myProfile) throws UserNotFoundException {
+		System.out.println("email "+myProfile.getEmail()+" password "+myProfile.getPassword());
+		Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(myProfile.getEmail(), myProfile.getPassword()));
+		System.out.println(authentication);
+		if(authentication.isAuthenticated()) {
+			String token1 = token.token(myProfile.getEmail());
+			System.out.println("passed");
+			Map<String, Object> map = new HashMap<>();
+			map.put("Token", token1);
+			map.put("token expiryTime", this.token.extractExpiration(token1));
+			map.put("token expiry Date", this.token.isTokenExpired(String.valueOf(token1)));
+			map.put("message", "success");
+			map.put("status", HttpStatus.OK.value());
+			map.put("username",myProfile.getEmail());
+
+			return ResponseEntity.ok().body(map);
+		}
+		else {
+			throw new BadCredentialsException("Invalid user and password");
+		}
+
 	}
 
 	@PutMapping("uploadPic/{name}")
@@ -53,4 +88,20 @@ public class MyProfileController {
 		return myProfileService.getAll();
 	}
 
+
+	@PostMapping("/forgot-mail")
+	public ResponseEntity<Map<String,Object>> forgotMail(@RequestBody MyProfile myProfile) {
+		if(StringUtils.isEmpty(myProfile.getEmail())){
+			Map<String,Object>map=new HashMap<>();
+			map.put("message", "please provide your mailId");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			return ResponseEntity.ok(map);
+		}
+		else{
+
+          MyProfile details1=new MyProfile();
+          String baseUrl="http://localhost:3000/resetPassword";
+         return myProfileService.forgotMail(myProfile.getEmail(),baseUrl);
+		}
+	}
 }

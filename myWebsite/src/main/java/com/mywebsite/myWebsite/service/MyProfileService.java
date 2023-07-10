@@ -16,6 +16,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mywebsite.myWebsite.dto.MyProfileDto;
@@ -31,13 +34,41 @@ public class MyProfileService {
 	@Autowired
 	private MyProfileRepository myProfileRepository;
 
+	@Autowired
+	private PasswordEncoder encoder;
+
 	@Value("${files.storage}")
 	public String folderLocation;
 
-	//private final Path root = Paths.get(folderLocation);
+	@Autowired
+	private MyProfileRepository repo;
 
+	@Autowired
+	private JavaMailSender javaMailSender;
+
+
+	public ResponseEntity<Map<String,Object>> forgotMail(String email,String resetUrl){
+		MyProfile myProfile=this.repo.getByEmail(email);
+		if(myProfile!=null){
+			SimpleMailMessage message=new SimpleMailMessage();
+			message.setTo(email);
+			message.setSubject("Forgot-password-mail");
+			message.setText(resetUrl);
+			javaMailSender.send(message);
+			map.put("message", "Mail Sent Successfully");
+			map.put("status", HttpStatus.OK.value());
+		}
+		else{
+			map.put("message", "Email Not Found");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			throw new NullPointerException("Please provide correct emailId");
+		}
+		return ResponseEntity.ok(map);
+	}
 
 	public ResponseEntity<Map<String,Object>> add(MyProfile myProfile){
+
+		myProfile.setPassword(encoder.encode(myProfile.getPassword()));
 		this.myProfileRepository.save(myProfile);
 			map.put("message", "submitted");
 			map.put("status", HttpStatus.OK.value());
@@ -72,7 +103,8 @@ public class MyProfileService {
 			dto.setGender(myprofile.getGender());
 			dto.setAddress(myprofile.getAddress());
 			dto.setDescription(myprofile.getDescription());
-			dto.setDateOfBirth(myprofile.getDateOfBirth());
+			dto.setDateOfBirth(String.valueOf(myprofile.getDateOfBirth()));
+			System.out.println(dto.getDateOfBirth());
 			dto.setContactNo(myprofile.getContactNo());
 
 			list.add(dto);

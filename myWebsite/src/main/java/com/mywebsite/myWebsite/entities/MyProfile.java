@@ -1,23 +1,23 @@
 package com.mywebsite.myWebsite.entities;
 
+import java.lang.annotation.Documented;
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Entity
-@Table
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Document(collection = "my_profile")
 public class MyProfile {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
 	private String description;
@@ -29,5 +29,4 @@ public class MyProfile {
     private String password;
     private  String profile;
 
-	
 }

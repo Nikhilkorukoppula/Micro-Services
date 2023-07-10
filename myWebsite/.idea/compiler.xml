@@ -9,12 +9,17 @@
         <outputRelativeToContentRoot value="true" />
         <module name="myWebsite" />
         <module name="Authentication" />
+        <module name="pdfReader" />
+        <module name="eidiko-leaves-service" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Authentication" options="-parameters" />
+      <module name="eidiko-leaves-service" options="-parameters" />
       <module name="myWebsite" options="-parameters" />
+      <module name="pdfReader" options="-parameters" />
     </option>
   </component>
 </project>

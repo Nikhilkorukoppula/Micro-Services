@@ -6,6 +6,8 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../Authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/../../../pdfReader/pdfReader/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-leaves-service/pom.xml" />
       </list>
     </option>
   </component>

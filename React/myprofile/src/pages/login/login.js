@@ -34,10 +34,15 @@ function Login(){
   }, []);
     const handleClick= async ()=> {
       setIsloading(true)
-        const queryParams= `email=${email}&password=${password}`;
-        await axios.post(`http://localhost:8085/api/V1/myprofile/login?${queryParams}`).then((res)=>{
+       // const queryParams= `email=${email}&password=${password}`;
+        await axios.post(`http://localhost:8085/api/V1/myprofile/login`,{
+          "email":email,
+          "password":password
+        }).then((res)=>{
             console.log(res)
             if(res.status===200){
+              sessionStorage.setItem("token",res.data.Token)
+              sessionStorage.setItem("id",email)
           setIsloading(false)
             Swal.fire({ width:"400px",
 		                  title: "Login Success",
@@ -82,7 +87,7 @@ function Login(){
           const toggleModal = () => {
             setIsOpen(!isOpen);
           };
-        
+
 
     return(
   <Box className='homepage'  sx={{ justifyContent:'center',
@@ -99,20 +104,20 @@ function Login(){
                         <Box className='inside-div' bgcolor={'white'}item xs={12}
                                                 sx={{ justifyContent:'center',
                                                 justifyitems:'center',
-                                                display:'block' }} >
+                                                display:'flex' }} >
                             
                                 <Grid marginTop={'30px'} item xs={12}
                                                 sx={{ justifyContent:'center',
-                                                justifyitems:'center' }}>
-                                <h3>Login</h3>
+                                                justifyitems:'center'}}>
+                                <h2>Login</h2>
                                 <h4>Don't you have Account.? 
             <Link to='createProfile' style={{fontFamily:'arial',fontStyle:'oblique'}}>Click here</Link>
             </h4> 
                                 <TextField id="filled-basic" label="Email" variant="filled" type="email" onChange={handleEmail}/> <br></br>
                                 <TextField id="filled-basic" label="Password" variant="filled" type="password" onChange={handlePassword} /><br></br><br></br>
                                 <Grid textAlign={'justify'}>
-                                <a href=''>forgot password</a><br></br><br></br>
-                                <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
+                                <h4 onClick={()=>{navigate("/login/forgot-password")}} style={{ color:"#263238",marginLeft: "170px", marginTop: "5px" ,cursor:"pointer"}}>Forgot Password?</h4>
+                                <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef} style={{marginLeft:'90px'}}>
                                          Login
                                 </Button>
                                 </Grid> 

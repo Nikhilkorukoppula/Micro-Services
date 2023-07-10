@@ -92,18 +92,18 @@ public class MainController {
 
     @PostMapping("/forgot-mail")
     public String forgotMail(@RequestBody LoginDetails details) {
-      if(StringUtils.isEmpty(details.getEmail())){
-          return "please provide your mailId";
-      }
-      else{
+        if(StringUtils.isEmpty(details.getEmail())){
+            return "please provide your mailId";
+        }
+        else{
 
         /*  LoginDetails details1=new LoginDetails(details.getEmail());
           String baseUrl="http://localhost:8010/Security/resetPassword";
           serviceClass.forgotPassword(details.getEmail(),baseUrl);*/
-          String password= UUID.randomUUID().toString().substring(0, 8);
-          System.out.println(password);
-          serviceClass.forgotPassword(details.getEmail(), password);
-      }
+            String password= UUID.randomUUID().toString().substring(0, 8);
+            System.out.println(password);
+            serviceClass.forgotPassword(details.getEmail(), password);
+        }
         return "sent successfully";
     }
 

@@ -1,14 +1,37 @@
+
+server:
+  port: 8085
+
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/nikhil
-    username: nikhil
-    password: nikhil
-  jpa:
+  data:
+    mongodb:
+      url: mongodb+srv://nikhil:nikhil@cluster0.rl7ujaw.mongodb.net/Nikhildb?retryWrites=true&w=majority
+      database: Nikhildb
+      port: 27017
+  mongodb:
     hibernate:
       ddl-auto: update
+      show-sql: true
+
+
+# Mail Configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: nikhilkorukoppula@gmail.com
+    password: ufwbsbnwkdjobmlc
+    properties:
+       mail:
+       smtp:
+       auth: true
+       starttls:
+       enable: true
+  servlet:
+     multipart:
+       enabled: true
+       file-size-threshold: 2KB
+       max-file-size: 200MB
+       max-request-size: 215MB
+
 files:
  storage: C:/nikhil
-      
-server:
- port: 8085

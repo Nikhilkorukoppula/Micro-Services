@@ -56,7 +56,7 @@ function CreateProfile(){
                             alignItems:'center',marginTop:'100px',height:'500px',width:'500px',textAlign:'center'}}
                             sx={{boxShadow:'10',borderRadius:'10px'}}>
               <h2>Profile Details</h2>
-              <TextField  value={name} onChange={(e)=>{setName(e.target.value)}} label="FirstName" variant="standard" type="text"/><br/>
+              <TextField  value={name} onChange={(e)=>{setName(e.target.value)}} label="FirstName" variant="standard" type="text" /><br/>
               <TextField  value={gender} onChange={(e)=>{setGender(e.target.value)}} label="gender" variant="standard" type="text" /><br/>
               <TextField  value={email} onChange={(e)=>{setEmail(e.target.value)}} label="Email" variant="standard" type="email" /><br/><br/>
               <TextField  value={dob} onChange={(e)=>{setDob(e.target.value)}} style={{width:'200px'}} variant="standard" type="date"/><br/>

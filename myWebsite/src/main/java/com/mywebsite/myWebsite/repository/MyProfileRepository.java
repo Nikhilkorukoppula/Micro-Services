@@ -1,14 +1,29 @@
 package com.mywebsite.myWebsite.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.mywebsite.myWebsite.entities.MyProfile;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.stereotype.Repository;
 
-public interface MyProfileRepository extends JpaRepository<MyProfile, Integer>{
+import java.util.Optional;
+
+@Repository
+@EnableMongoRepositories
+@ComponentScan
+public interface MyProfileRepository extends MongoRepository<MyProfile, Integer> {
 	
 	public MyProfile findByName(String name);
 
-    MyProfile findByEmailAndPassword(String email, String password);
 
+
+    public MyProfile getByName(String name);
+    MyProfile findByEmailAndPassword(String email, String password);
+    //
+    Optional<MyProfile> findByEmail(String email);
+
+    @Query("{ 'email' : ?0 }")
+    MyProfile getByEmail(String email);
 
 }
