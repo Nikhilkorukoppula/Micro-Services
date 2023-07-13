@@ -1,8 +1,9 @@
 
-import { Avatar, Box,Grid, Button} from '@mui/material';
+import { Avatar, Box,Grid, Button, TextField,Fade, Backdrop, Drawer} from '@mui/material';
 import './profile.css';  
 import * as React from 'react';
 import { useState, useEffect , useRef} from 'react';
+import {Create } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -15,19 +16,21 @@ import DrawerAppBar from '../../navbar/navbar';
 import { Navigate, useNavigate } from 'react-router-dom';
 import UserDetails from './Details';
 import Details from './Details';
+import { Modal } from 'reactstrap';
 
  function Profile() {
 
   // const token = sessionStorage.getItem("token")
   const [data2, setData2] = useState();
   const [data1, setData1] = useState();
+  const [description, setDescription] = useState();
   const [visible, setVisible] = useState(false);
   const [visible1, setVisible1] = useState(false);
   const aboutRef = useRef(null);
   const [scrollCount, setScrollCount] = useState(0);
   const [showAvatar, setShowAvatar] = useState(true);
   const [hoveredItem, setHoveredItem] = useState(false); 
-  
+  const email=sessionStorage.getItem("id")
   const handleMouseEnter = () => {
     setHoveredItem(true);
   };
@@ -47,13 +50,13 @@ import Details from './Details';
     return request;
   };
 
-    const jwt=axios.interceptors.request.use(interceptor);
+    const jwt=axios.interceptors.request.use(interceptor); 
  
 
 
   const handleClick = async () => {
     try{
-     await axios.get('http://localhost:8085/api/V1/myprofile/getAll',jwt).then((response)=>{
+     await axios.get(`http://10.0.0.24:8085/api/V1/myprofile/getAll/${email}`,jwt).then((response)=>{
  
       if (response.status === 200) {
         console.log(response.data.result);
@@ -77,10 +80,11 @@ import Details from './Details';
      const handleClick1 = async () => {
       
      
-      await axios.get('http://localhost:8085/api/V1/myprofile/getAll').then((res)=>{
+      await axios.get(`http://10.0.0.24:8085/api/V1/myprofile/getDesc/${email}`,jwt).then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
-          setData1(res.data.result)
+          setDescription(res.data.result)
+           console.log(description)
           setVisible1(!visible1);
         }
         else{
@@ -102,7 +106,7 @@ const handleUploadButtonClick = () => {
   fileInputRef.current.click();
 };
 
-     const getPic='http://localhost:8085/api/V1/myprofile/getPic/nikki'
+     const getPic=('http://10.0.0.24:8085/api/V1/myprofile/getPic/nikhil',jwt)
     
     const handleProfileChange = (file) => {
       let form =new FormData()  //for uploading mulitpart file 
@@ -111,7 +115,7 @@ const handleUploadButtonClick = () => {
 
     axios({ //it is used to call the service to conmplt the operation(upload)
       method: "put",
-      url: `http://localhost:8085/api/V1/myprofile/uploadPic/nikki?`,
+      url: `http://10.0.0.24:8085/api/V1/myprofile/uploadPic/nikhil?`,
       data: form,
       headers: { "Content-Type": 'multipart/form-data'},
     })
@@ -156,7 +160,31 @@ const handleUploadButtonClick = () => {
   }
   }, [scrollCount]);
 
+  const handleAboutSubmit =async()=>{
+    await axios.put(`http://10.0.0.24:8085/api/V1/myprofile/update/${email}`,{
+      "description":description,
+      jwt
+    })
+  }
+  const [open, setOpen] = React.useState(false);
 
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleModalOpen = () => setOpenModal(true);
+  const handleModalClose = () => setOpenModal(false);
+
+  useEffect(() => {
+}, [openModal,open]);
+
+const style = {
+  position: 'absolute',
+  left: '50%',
+  transform: 'translate(-50%, -200%)',
+  transition:'smooth',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+};
   return (
   
     
@@ -164,33 +192,27 @@ const handleUploadButtonClick = () => {
     sx={{ justifyContent:'center',
            justifyitems:'center',
            display:'flex' }}  >
-             <DrawerAppBar aboutRef={aboutRef}/>
+             <DrawerAppBar aboutRef={aboutRef} />
+             
            
       <header className="App-header">
             <img style={{position:'fixed'}} width='100%' height='100%' 
             src={require('./computer.jpg')} alt='deleted'> 
         </img>       
-        <div className='fixed'
-      sx={{ justifyContent:'center',
-      justifyitems:'center',
-      display:'flex' }}  item xs={12}>
-             <Button style={{color:'black'}}>Home</Button>
-            
-             <Button color="secondary">Resume</Button>
-             <Button >LogOut</Button>
-      </div>
       </header>
+     
       <Box className='div-cont'   sx={{ justifyContent:'center',
            justifyitems:'center',
-           display:'flex' }}  item xs={12}>
-      <Box width={'100%'} bgcolor={'white'} height={'90px'} item xs={12}
+           display:'flex',
+           felxDirection:'column' }}  >
+      <Box width={'100%'} bgcolor={'white'} height={'90px'}
          sx={{ justifyContent:'center',
          justifyitems:'center',
          display:'flex' }} >
          
             
            
-        <Box className='div-cont2' item xs={12}
+        <Box className='div-cont2'
            sx={{
             boxShadow: 10, justifyContent:'center',
            justifyitems:'center',
@@ -229,98 +251,181 @@ const handleUploadButtonClick = () => {
              
         </Box>
         </Box>
+       
       </Box>
-
-      <Box className='div-cont1' item xs={12}
-       sx={{ justifyContent:'center',
-       justifyitems:'center',
-       display:'flex' }} >
-       <Box className='dive' sx={{ boxShadow: 3,
-         justifyContent:'center',
-        justifyitems:'center',
-        display:'flex'  }} item xs={12}>
-
-       <Grid  textAlign={'center'} item xs={12}> 
-      <Button className='button3' style={{marginTop:"20px",height:"50px"}}
-       onClick={handleClick1}  items xs={12}  ><h3  >Who Am I ?</h3>
-      </Button>
-     
-
-      <Grid  textAlign={'justify'} item xs={12}>
-      {visible1 &&data1.map((item) => (
-             <h3>{item.description}</h3>
-        
-          ))}
-          </Grid>
-        </Grid>
-      </Box>&nbsp;&nbsp;
- 
- 
-      <Box className='dive' sx={{ boxShadow: 3,
-         justifyContent:'center',
-        justifyitems:'center',
-        display:'flex'  }} item xs={12} ref={aboutRef}>
-
-       <Grid textAlign={'center'} item xs={12}> 
-      <Button className='button3' style={{marginTop:"20px",height:"50px"}}
-       onClick={handleClick}  item xs={12}  ><h3 item xs={12} >Profile</h3>
-      </Button>
       
-        <Grid  textAlign={'justify'} item xs={12} >
-            {visible &&data2.map((item) => (
-                 <h4 style={{fontFamily:'initial', fontStyle:'oblique',color:'darkcyan',fontSize:'20px'}}>
-                  Name: {item.name} <br />
-                Email: {item.email} <br />
-                 Contact No: {item.contactNo} <br />
-                 Gender: {item.gender} <br />
-                 DOB: {item.dateOfBirth}</h4>
-                
-            ))}
-               </Grid>
+
+       <Box
+      className="div-cont1"
+      sx={{
+        justifyContent: 'center',
+        justifyItems: 'center',
+        display: 'flex',
+      }}
+    >
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
+          <Box
+            className="dive"
+            sx={{
+              boxShadow: 3,
+              justifyContent: 'center',
+              justifyItems: 'center',
+              display: 'flex',
+            }}
+          >
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Button
+                  className="button3"
+                  style={{ marginTop: '20px', height: '50px' }}
+                  onClick={handleClick1}
+                >
+                  <h3>Who Am I ?</h3>
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Grid
+                  textAlign="justify"
+                  item
+                  xs={12}
+                  padding="25px"
+                  sx={{ mt: 2 }}
+                >
+                  {visible1 && description}
+                  <Button>
+                    <Create
+                      color="primary"
+                      sx={{
+                        cursor: 'pointer'
+                      }}
+                      onClick={handleModalOpen}
+                    ></Create>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
-     </Box > &nbsp;&nbsp;
-    
-    
-     <Box className='dive' sx={{ boxShadow: 3,
+
+        <Grid item xs={12} sm={4}   ref={aboutRef}>
+          <Box
+            className="dive"
+            sx={{
+              boxShadow: 3,
+              justifyContent: 'center',
+              justifyItems: 'center',
+              display: 'flex',
+            }}
+          
+          >
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Button
+                  className="button3"
+                  style={{ marginTop: '20px', height: '50px' }}
+                  onClick={handleClick}
+                >
+                  <h3>Profile</h3>
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Grid textAlign="justify" display="flex">
+                  {visible &&
+                    data2.map((item) => (
+                      <h4
+                        style={{
+                          fontFamily: 'initial',
+                          fontStyle: 'oblique',
+                          color: 'darkcyan',
+                          fontSize: '20px'
+                        }}
+                      >
+                        Name: {item.name} <br />
+                        Email: {item.email} <br />
+                        Contact No: {item.contactNo} <br />
+                        Gender: {item.gender} <br />
+                        DOB: {item.dateOfBirth}
+                      </h4>
+                    ))}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+
+        <Grid item xs={12} sm={4}>
+          <Box
+            className="dive"
+            sx={{
+              boxShadow: 3,
+              justifyContent: 'center',
+              justifyItems: 'center',
+              display: 'flex',
+            }}
+          >
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Button
+                  className="button3"
+                  style={{ marginTop: '20px', height: '50px' }}
+                  onClick={handleClick}
+                >
+                  <h3>Experience</h3>
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid> 
+     
+     
+<p style={{paddingLeft:'200px'}}></p>     
+          
+        <Grid item xs={12} sm={4} sx={{
          justifyContent:'center',
         justifyitems:'center',
-        display:'flex'  }} item xs={12}>
-
-       <div  textAlign={'center'} item xs={12}> 
-      <Button className='button3' style={{marginTop:"20px",height:"50px"}}
-       onClick={handleClick}  item xs={12}  ><h3 item xs={12}  display={'flex'} >Experience</h3>
-      </Button>
-      </div>
-     </Box >
-     </Box>
-
-     <Box className="div-cont1" item xs={12} sx={{ 
-         justifyContent:'center',
-        justifyitems:'center',
-        display:'flex'  }}>
+        display:'flex', }}>
      <Box className='div4' sx={{boxShadow: 3,
          justifyContent:'center',
         justifyitems:'center',
-        display:'flex' }} item xs={12} >
+        display:'flex' }}>
          <div textAlign={'center'}>
-      <Button className='button3' style={{marginTop:"20px",height:"50px"}} item xs={12}>
+         <Grid container direction="column" alignItems="center">
+              <Grid item>
+      <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Education</h3>
       </Button>
+      </Grid>
+      </Grid>
       </div>
-     </Box> &nbsp;&nbsp;&nbsp;
+     </Box>
+     </Grid>
 
+
+     <Grid item xs={12} sm={4} sx={{
+         justifyContent:'center',
+        justifyitems:'center',
+        display:'flex', }}>
      <Box className='div4' sx={{boxShadow: 3,
          justifyContent:'center',
         justifyitems:'center',
-        display:'flex' }} item xs={12} >
+        display:'flex' }}>
          <div textAlign={'center'}>
-      <Button className='button3' style={{marginTop:"20px",height:"50px"}} item xs={12}>
-        <h3>Skill</h3>
+         <Grid container direction="column" alignItems="center">
+              <Grid item>
+      <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
+        <h3>Skills</h3>
       </Button>
+      </Grid>
+      </Grid>
       </div>
      </Box>
-    
-     </Box>
+     </Grid>
+    </Grid>
+    </Box>
+     {/* </Box> */}
     <Box className='footer'>
     <br></br><br />
      <footer >
@@ -333,7 +438,52 @@ const handleUploadButtonClick = () => {
     <TwitterIcon/>
     </footer> 
     </Box>
-  
+
+    <Modal   
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                isOpen={openModal}
+                onClose={handleModalClose}
+                closeAfterTransition
+                  
+              
+            >
+                <Fade in={openModal}>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                        <Box sx={style}>
+                            <form onSubmit={handleAboutSubmit}>
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="About Me"
+                                    sx={{
+                                        width: '100%',
+                                        margin: '10px 0px'
+                                    }} 
+                                    defaultValue={description} 
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
+                               
+                               
+                               <Grid item xs={12} sx={{display:'flex',
+                    justifyContent:'center',
+                    alignItems:'center'
+                }}>
+                        <Button   sx={{marginTop:"10px"}} type='submit' disableElevation variant="contained" >UPDATE</Button>
+
+                        <Button  sx={{marginLeft:"20px",marginTop:"10px"}} onClick={handleModalClose} variant='contained' >Cancel</Button>
+                    </Grid>
+                            </form>
+                        </Box>
+                    </Box>
+                  
+                </Fade>
+            </Modal>
+      
     </div>
 
   );

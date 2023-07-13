@@ -31,7 +31,11 @@ function DrawerAppBar(props) {
             }
           };
   
-  
+    const handleLinkClick = (section) => {
+            scrollToAbout(section);
+            handleDrawerToggle();
+          };
+        
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -41,19 +45,21 @@ function DrawerAppBar(props) {
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', backgroundColor:'#4694fa' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        Menu
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+          <ListItem key={item} disablePadding sx={{ justifyContent: 'center' }} >
+            <Button  sx={{ color: 'black' }} onClick={() => handleLinkClick(item)}>
               <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
+            </Button>
+          </ListItem>  
+           
         ))}
+          
       </List>
     </Box>
   );
@@ -80,7 +86,7 @@ function DrawerAppBar(props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-             <Button key={item} sx={{ color: '#fff' }} onClick={() => scrollToAbout(item)}>
+             <Button key={item} sx={{ color: '#fff' }} onClick={() => handleLinkClick(item)}>
              {item}
            </Button>
             

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Setter
@@ -15,9 +16,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @ToString
 @Document(collection = "my_profile")
 public class MyProfile {
+	@Transient
+	public static final String SEQUENCE_NAME = "my_profile_sequence";
 
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
 	private String description;

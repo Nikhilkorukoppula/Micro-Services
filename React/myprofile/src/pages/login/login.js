@@ -35,7 +35,7 @@ function Login(){
     const handleClick= async ()=> {
       setIsloading(true)
        // const queryParams= `email=${email}&password=${password}`;
-        await axios.post(`http://localhost:8085/api/V1/myprofile/login`,{
+        await axios.post(`http://10.0.0.24:8085/api/V1/myprofile/login`,{
           "email":email,
           "password":password
         }).then((res)=>{

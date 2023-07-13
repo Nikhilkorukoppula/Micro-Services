@@ -77,15 +77,28 @@ public class MyProfileController {
 	public Resource getPic(@PathVariable("name") String name) throws IOException {
 		return myProfileService.getPic(name);
 	}
-	@PutMapping("update")
-	public ResponseEntity<Map<String,Object>> update(@RequestParam String name,
-													 @RequestParam String description){
-		return myProfileService.update(name,description);
+	@PutMapping("update/{email}")
+	public ResponseEntity<Map<String,Object>> update(@PathVariable("email") String email,
+													 @RequestBody MyProfile description){
+		return myProfileService.update(email,description);
 	}
 
-	@GetMapping("getAll")
-	public ResponseEntity<Map<String,Object>> getAll(){
-		return myProfileService.getAll();
+	@GetMapping("getAll/{email}")
+	public ResponseEntity<Map<String,Object>> getAll(@PathVariable("email") String mail){
+
+		return myProfileService.getAll(mail);
+	}
+
+	@GetMapping("getAllDetails")
+	public ResponseEntity<Map<String,Object>> getAllDetails(){
+
+		return myProfileService.getAllDetails();
+	}
+
+	@GetMapping("getDesc/{email}")
+	public ResponseEntity<Map<String,Object>> getDesc(@PathVariable("email") String email){
+
+		return myProfileService.getDesc(email);
 	}
 
 
