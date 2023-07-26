@@ -163,9 +163,10 @@ public class MyProfileService {
 	}
 
 
-	public ResponseEntity<Map<String,Object>>  uploadPic(MultipartFile file,String name) {
-		MyProfile myProfile=myProfileRepository.findByName(name);
+	public ResponseEntity<Map<String,Object>>  uploadPic(String email,MultipartFile file) {
+		MyProfile myProfile=myProfileRepository.getByEmail(email);
 		if(myProfile!=null) {
+			System.out.println("started");
 			String fileExtension = StringUtils.getFilenameExtension(file.getOriginalFilename());
 			System.out.println(fileExtension);
 			List<String> extensions = new ArrayList<>();
@@ -180,7 +181,7 @@ public class MyProfileService {
 					throw new RuntimeException("please provide valid image");
 				}
 				else{
-					String fileName = name+".jpg";
+					String fileName = myProfile.getName()+".jpg";
 					Files.copy(file.getInputStream(),
 							Paths.get(folderLocation).resolve(fileName),StandardCopyOption.REPLACE_EXISTING);
 					myProfile.setProfile(fileName);
@@ -202,6 +203,7 @@ public class MyProfileService {
 
 		}
 		else{
+			System.out.println("error");
 			map.put("message", "error");
 			map.put("status", HttpStatus.BAD_REQUEST.value());
 			throw  new NullPointerException("User not found");
@@ -209,8 +211,9 @@ public class MyProfileService {
 		return ResponseEntity.ok(map);
 	}
 
-	public Resource getPic(String name){
-		MyProfile myProfile=myProfileRepository.findByName(name);
+	public Resource getPic(String email){
+		MyProfile myProfile=myProfileRepository.getByEmail(email);
+		Map<String,Object>map=new HashMap<>();
 		String fileName=myProfile.getProfile();
 		try {
 			Path file = Paths.get(folderLocation).resolve(fileName);

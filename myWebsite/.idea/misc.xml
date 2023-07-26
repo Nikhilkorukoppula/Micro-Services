@@ -8,7 +8,17 @@
         <option value="$PROJECT_DIR$/../Authentication/pom.xml" />
         <option value="$PROJECT_DIR$/../../../pdfReader/pdfReader/pom.xml" />
         <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-leaves-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-employee-service_1/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-reporting-manager-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../../eidiko_recruitment_service/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-employee-service_1/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-leaves-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-reporting-manager-service/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="corretto-17" project-jdk-type="JavaSDK" />

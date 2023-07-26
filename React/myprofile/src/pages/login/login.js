@@ -1,22 +1,25 @@
 import * as React from 'react';
 import './login.css';
-import { Box,Grid, Button, TextField} from '@mui/material';
+import { Box, Grid, Button, TextField, useMediaQuery } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
-import axios from 'axios'
+import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect , useRef} from 'react';
-import {  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import Swal from "sweetalert2";
+import { useState, useEffect, useRef } from 'react';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import Loading from '../Loading Component/loading';
+import Switch from '@mui/material/Switch';
+import ColorSwitches from '../Loading Component/switch';
 
-
-function Login(){
-
-  const navigate= useNavigate();
-  const [email,setEmail]=useState();
-  const [password,setPassword]=useState();
-  const[isLoading,setIsloading]=useState(false);
+function Login() {
+  const [isRotated, setIsRotated] = useState(false);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const loginButtonRef = useRef();
+  const isMobile = useMediaQuery('(max-width: 600px)'); // Adjust the breakpoint value as needed
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -32,115 +35,121 @@ function Login(){
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-    const handleClick= async ()=> {
-      setIsloading(true)
-       // const queryParams= `email=${email}&password=${password}`;
-        await axios.post(`http://10.0.0.24:8085/api/V1/myprofile/login`,{
-          "email":email,
-          "password":password
-        }).then((res)=>{
-            console.log(res)
-            if(res.status===200){
-              sessionStorage.setItem("token",res.data.Token)
-              sessionStorage.setItem("id",email)
-          setIsloading(false)
-            Swal.fire({ width:"400px",
-		                  title: "Login Success",
-	                  	text: "redirecting please wait",
-                      timer:"1000",
-	                   });
-          navigate('/profile')
-            }
-            else if(res.status===404){
-              setIsloading(false)
-              Swal.fire({ width:"400px",
-              title: "Login Failure",
-              text: "",
-              timer:"1000",
-             });
-                console.error(res.data)
-                 navigate('/login')
-              
-            }
-        }).catch(error => {
-          setIsloading(false)
-          Swal.fire({ width:"400px",
-              title: "Login Failure",
-              text: "Username or Password invalid",
-             
-             });
 
-      })
+  const handleClick = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-    }
+    try {
+      const response = await axios.post('http://localhost:8086/api/V1/myprofile/login', {
+        email: email,
+        password: password
+      });
+console.log(email,password)
+      if (response.status === 200) {
+        sessionStorage.setItem('token', response.data.Token);
+        sessionStorage.setItem('id', email);
+        setIsLoading(false);
 
-    const handleEmail =(e)=>{
-    setEmail(e.target.value)
-    }
-    const handlePassword =(e)=>{
-        setPassword(e.target.value)
-        }
+        Swal.fire({
+          width: '400px',
+          title: 'Login Success',
+          text: 'Redirecting, please wait',
+          timer: '1000'
+        });
 
+        navigate('/profile');
+        setEmail('');
+        setPassword('')
+      } else if (response.status === 404) {
+        setIsLoading(false);
+
+        Swal.fire({
+          width: '400px',
+          title: 'Login Failure',
+          text: '',
+          timer: '1000'
+        });
+
+        console.error(response.data);
+        navigate('/login');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      window.location.reload()
+      Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: 'Invalid Username or Password..!',
+        showConfirmButton: false,
+        timer: 1500
        
-          const [isOpen, setIsOpen] = useState(false);
+      });
+    }
+   
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <Box className="homepage" sx={{ justifyContent: 'center', display: 'flex' }} item xs={12}>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Box className="main-div" sx={{ justifyContent: 'center', boxShadow: 20, borderRadius: '10px', display: 'flex' }}>
+         
+          <Grid container spacing={isMobile ? 2 : 4} >
+           
+            <Grid item xs={12} >
+            <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+            <h2>Login/SignUp</h2>
+            </Grid> 
+            <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
+                    <ColorSwitches/>
+                    </Grid> 
+              <Box className="inside-div" sx={{ justifyContent: 'center', display: 'flex' , transition: 'transform 0.5s ease',
+                                                transform: `rotateY(${isRotated ? '180deg' : '0deg'})`}}>
+                <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="center" sx={{ justifyContent: 'center'}}>
+                  <Grid item xs={12} md={isMobile ? 12 : 6}>
+                     
+                   
+                    <TextField id="email"  label="Email" variant="filled" type="email" onChange={handleEmail} />
+                  
+                    <TextField id="password" label="Password" variant="filled" type="password" onChange={handlePassword} />
+                 
+                    <h4 onClick={() => navigate('/login/forgot-password')} style={{ color: '#263238', cursor: 'pointer' }}>
+                      Forgot Password?
+                    </h4>
+                 
+                    <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
+                      Login
+                    </Button>
+                  </Grid>
+                </Grid>
+                
+              </Box>
+            
+            </Grid>
+            
+          </Grid>
+          
+        </Box>
         
-          const toggleModal = () => {
-            setIsOpen(!isOpen);
-          };
-
-
-    return(
-  <Box className='homepage'  sx={{ justifyContent:'center',
-                                    justifyitems:'center',
-                                    display:'flex' }}  item xs={12}>
-                                   
-       
-                 <Box className='main-div' elevation={'20'} sx={{ justifyContent:'center',
-                                                boxShadow:'20',
-                                                borderRadius:['10px'],
-                                                justifyitems:'center',
-                                                display:'flex' }}  item xs={12}>
-                
-                        <Box className='inside-div' bgcolor={'white'}item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center',
-                                                display:'flex' }} >
-                            
-                                <Grid marginTop={'30px'} item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center'}}>
-                                <h2>Login</h2>
-                                <h4>Don't you have Account.? 
-            <Link to='createProfile' style={{fontFamily:'arial',fontStyle:'oblique'}}>Click here</Link>
-            </h4> 
-                                <TextField id="filled-basic" label="Email" variant="filled" type="email" onChange={handleEmail}/> <br></br>
-                                <TextField id="filled-basic" label="Password" variant="filled" type="password" onChange={handlePassword} /><br></br><br></br>
-                                <Grid textAlign={'justify'}>
-                                <h4 onClick={()=>{navigate("/login/forgot-password")}} style={{ color:"#263238",marginLeft: "170px", marginTop: "5px" ,cursor:"pointer"}}>Forgot Password?</h4>
-                                <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef} style={{marginLeft:'90px'}}>
-                                         Login
-                                </Button>
-                                </Grid> 
-                                </Grid>
-                              
-                              
-                        </Box> 
-                        <Box className='inside-div' bgcolor={'bisque'} item xs={12}
-                                                sx={{ justifyContent:'center',
-                                                justifyitems:'center',
-                                                display:'flex' }} >
-                           <p > <h2><i>WELCOME</i></h2> <br></br><br></br>
-                           <h4>Everything around you that you call life was made up by people that were no smarter than you. 
-                                And you can change it, you can influence it… Once you learn that, you'll never be the same again.
-                                </h4></p>
-                        </Box>
-                       
-                </Box>
-                
-
-  </Box>
-
-    );
-};
+      )}
+    </Box>
+  );
+}
 
 export default Login;

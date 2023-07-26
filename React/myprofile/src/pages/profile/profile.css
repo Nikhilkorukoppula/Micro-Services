@@ -25,10 +25,11 @@
   }
   .div4{
     display: flex;
-    flex: 1 1 40%;
+    flex: 1 1 10%;
     background-color: white;
     height: 300px;
-    
+    border-style: ridge;
+    border-bottom-style: ridge;
   }
   
   .dive{
@@ -36,7 +37,8 @@
     flex: 1 1 30%; 
     height: 300px;
     background-color: white;
-    
+    border-right-style: ridge;
+    border-bottom-style: ridge;
   }
 
  
@@ -88,13 +90,14 @@
     z-index: 1;
     width: 100%;
     height: 40px;
-    background-color:beige;
+    background-color:transparent;
     
   }
   .div-cont{
     display: flex;
     top: 0;
-    z-index: 1;
+    z-index: 2;
+    
   }
   .fixed{
     position: fixed;

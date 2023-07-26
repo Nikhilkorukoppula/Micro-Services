@@ -1,6 +1,5 @@
 .homepage{
     flex-direction: column;
-    width: 100%;
     height: 100vh;
     position: relative;
     align-items: center;
@@ -9,18 +8,18 @@
 }
 
 .main-div{
-    width: 45%;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     z-index: 1;
-    background-color: lightgray;
+    background-color: aliceblue;
 
-  .inside-div{
-        width: 50%;
-        height: 450px;
-        margin-top: 30px;
-        display: flex;
-        text-align: center;
-    }
+ 
+}
+.inside-div{
+    position: absolute;
+    width: 400px;
+    height: 250px;
+    text-align: center;
 }
 
 .profile{

@@ -67,15 +67,15 @@ public class MyProfileController {
 
 	}
 
-	@PutMapping("uploadPic/{name}")
-	public ResponseEntity<Map<String, Object>> uploadPic(@PathVariable("name") String name,
+	@PutMapping("uploadPic/{email}")
+	public ResponseEntity<Map<String, Object>> uploadPic(@PathVariable("email") String email,
 														 @RequestParam("file")MultipartFile file) throws IOException {
-		return myProfileService.uploadPic(file,name);
+		return myProfileService.uploadPic(email,file);
 	}
 
-	@GetMapping("getPic/{name}")
-	public Resource getPic(@PathVariable("name") String name) throws IOException {
-		return myProfileService.getPic(name);
+	@GetMapping("getPic/{email}")
+	public Resource getPic(@PathVariable("email") String email) throws IOException {
+		return myProfileService.getPic(email);
 	}
 	@PutMapping("update/{email}")
 	public ResponseEntity<Map<String,Object>> update(@PathVariable("email") String email,

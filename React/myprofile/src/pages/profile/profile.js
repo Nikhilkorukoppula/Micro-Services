@@ -16,8 +16,11 @@ import DrawerAppBar from '../../navbar/navbar';
 import { Navigate, useNavigate } from 'react-router-dom';
 import UserDetails from './Details';
 import Details from './Details';
-import { Modal } from 'reactstrap';
-
+import { Container, Modal } from 'reactstrap';
+import jwt_decode from 'jwt-decode';
+import Swal from 'sweetalert2';
+import Divider from '@mui/material/Divider';
+import { PieChart, Pie } from 'recharts';
  function Profile() {
 
   // const token = sessionStorage.getItem("token")
@@ -56,7 +59,7 @@ import { Modal } from 'reactstrap';
 
   const handleClick = async () => {
     try{
-     await axios.get(`http://10.0.0.24:8085/api/V1/myprofile/getAll/${email}`,jwt).then((response)=>{
+     await axios.get(`http://localhost:8085/api/V1/myprofile/getAll/${email}`,jwt).then((response)=>{
  
       if (response.status === 200) {
         console.log(response.data.result);
@@ -80,7 +83,7 @@ import { Modal } from 'reactstrap';
      const handleClick1 = async () => {
       
      
-      await axios.get(`http://10.0.0.24:8085/api/V1/myprofile/getDesc/${email}`,jwt).then((res)=>{
+      await axios.get(`http://localhost:8085/api/V1/myprofile/getDesc/${email}`,jwt).then((res)=>{
         console.log(res.data.result)
         if(res.status===200){
           setDescription(res.data.result)
@@ -106,7 +109,7 @@ const handleUploadButtonClick = () => {
   fileInputRef.current.click();
 };
 
-     const getPic=('http://10.0.0.24:8085/api/V1/myprofile/getPic/nikhil',jwt)
+     const getPic=(`http://localhost:8085/api/V1/myprofile/getPic/${email}`)
     
     const handleProfileChange = (file) => {
       let form =new FormData()  //for uploading mulitpart file 
@@ -115,7 +118,7 @@ const handleUploadButtonClick = () => {
 
     axios({ //it is used to call the service to conmplt the operation(upload)
       method: "put",
-      url: `http://10.0.0.24:8085/api/V1/myprofile/uploadPic/nikhil?`,
+      url: `http://localhost:8085/api/V1/myprofile/uploadPic/${email}`,jwt,
       data: form,
       headers: { "Content-Type": 'multipart/form-data'},
     })
@@ -169,25 +172,95 @@ const handleUploadButtonClick = () => {
   const [open, setOpen] = React.useState(false);
 
   const [openModal, setOpenModal] = React.useState(false);
-  const handleModalOpen = () => setOpenModal(true);
-  const handleModalClose = () => setOpenModal(false);
+  const handleModalOpen = () => {
+    setOpenModal(true);
+}
+  const handleModalClose = () => {setOpenModal(false);
 
+  document.body.style.overflow = 'hidden';
+  }
   useEffect(() => {
-}, [openModal,open]);
+}, [openModal]);
 
 const style = {
   position: 'absolute',
+  top:'10%',
   left: '50%',
-  transform: 'translate(-50%, -200%)',
-  transition:'smooth',
+  transform: 'translate(-50%, -250%)',
   width: 400,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
+  overflowY:'hidden'
+ 
+    // position: 'fixed',
+    // top: '300px',
+    // left: '50%',
+    // transform: 'translate(-50%, -50%)',
+    // transition: 'smooth',
+    // width: 400,
+    // bgcolor: 'background.paper',
+    // boxShadow: 24,
+    // p: 4,
+    // maxHeight: '90vh',
+    // overflowY: 'hidden',
+    // alignItems:'center',
+    // justifyItems:'center'
 };
+
+
+
+useEffect(() => {
+  checkTokenExpiration();
+  return () => {
+  };
+}, []);
+
+const navigate = useNavigate();
+const checkTokenExpiration = () => {
+  const token = sessionStorage.getItem('token');
+if (token) {
+  try {
+    const decodedToken = jwt_decode(token);
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+
+    if (decodedToken.exp < currentTimestamp) {
+      Swal.fire({
+        width: '400px',
+        Icon:'error',
+        title: 'Session exprired',
+        text: 'Redirecting, please wait',
+        timer: '1000'
+      });
+      navigate('/login');
+    }
+  } catch (error) {
+    Swal.fire({
+      width: '400px',
+      Icon:'error',
+      title: 'Something went wrong',
+      text: 'Please wait',
+      timer: '2000'
+    });
+  
+    console.error('Failed to decode token:', error);
+  }
+} else {
+   Swal.fire({
+  width: '400px',
+  Icon:'error',
+  title: 'Something went wrong',
+  text: 'Please wait',
+  timer: '1000' 
+});
+ 
+  console.error('Token not found');
+  navigate('/login');
+}
+};
+
   return (
   
-    
     <div className="App"  item xs={12}
     sx={{ justifyContent:'center',
            justifyitems:'center',
@@ -202,11 +275,14 @@ const style = {
       </header>
      
       <Box className='div-cont'   sx={{ justifyContent:'center',
+           backgroundColor:'blue',
            justifyitems:'center',
            display:'flex',
            felxDirection:'column' }}  >
-      <Box width={'100%'} bgcolor={'white'} height={'90px'}
+      <Box width={'100%'} height={'90px'}
          sx={{ justifyContent:'center',
+         boxShadow:3, 
+        backgroundColor:'white',
          justifyitems:'center',
          display:'flex' }} >
          
@@ -214,7 +290,7 @@ const style = {
            
         <Box className='div-cont2'
            sx={{
-            boxShadow: 10, justifyContent:'center',
+            boxShadow: 0, justifyContent:'center',
            justifyitems:'center',
            display:'flex' ,transition:'opacity 0.5s'}} >
               
@@ -222,7 +298,7 @@ const style = {
           {showAvatar && (
           <Avatar item  xs={12}  className='Avatar'
           sx={{transition:'opacity 1s'}}
-          style={{backgroundImage:`url(${getPic})`, width: '100px', height: '100px'}}
+          style={{backgroundImage: `url(${getPic})`, width: '100px', height: '100px'}}
          >
           <form enctype="multipart/form-data" >
          <input  type='file' className='my_file' onChange={handleProfileChange}  ref={fileInputRef}/>
@@ -263,12 +339,11 @@ const style = {
         display: 'flex',
       }}
     >
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={4}>
+      <Grid container spacing={0}>
+        <Grid item xs={12} sm={4} >
           <Box
             className="dive"
             sx={{
-              boxShadow: 3,
               justifyContent: 'center',
               justifyItems: 'center',
               display: 'flex',
@@ -307,13 +382,12 @@ const style = {
               </Grid>
             </Grid>
           </Box>
-        </Grid>
-
+           </Grid>
+        
         <Grid item xs={12} sm={4}   ref={aboutRef}>
           <Box
             className="dive"
             sx={{
-              boxShadow: 3,
               justifyContent: 'center',
               justifyItems: 'center',
               display: 'flex',
@@ -360,7 +434,6 @@ const style = {
           <Box
             className="dive"
             sx={{
-              boxShadow: 3,
               justifyContent: 'center',
               justifyItems: 'center',
               display: 'flex',
@@ -379,15 +452,23 @@ const style = {
             </Grid>
           </Box>
         </Grid> 
-     
-     
-<p style={{paddingLeft:'200px'}}></p>     
-          
-        <Grid item xs={12} sm={4} sx={{
+        </Grid>
+
+    <Grid item xs={12} sx={{height:'50px',
+    width:'100%',
+         justifyContent:'flex-start',
+        justifyitems:'', 
+        display:'flex',paddingLeft:'' }}>
+<h3 style={{color:'#d13459'}}>My Resume</h3>
+    </Grid>    
+   
+<Grid container spacing={4}>
+   <p style={{paddingLeft:'60px'}}></p>
+        <Grid item xs={12} sm={3.5} sx={{
          justifyContent:'center',
         justifyitems:'center',
         display:'flex', }}>
-     <Box className='div4' sx={{boxShadow: 3,
+     <Box className='div4' sx={{
          justifyContent:'center',
         justifyitems:'center',
         display:'flex' }}>
@@ -397,6 +478,9 @@ const style = {
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Education</h3>
       </Button>
+      <PieChart>
+        <Pie></Pie>
+      </PieChart>
       </Grid>
       </Grid>
       </div>
@@ -404,11 +488,11 @@ const style = {
      </Grid>
 
 
-     <Grid item xs={12} sm={4} sx={{
+     <Grid item xs={12} sm={3.5} sx={{
          justifyContent:'center',
         justifyitems:'center',
         display:'flex', }}>
-     <Box className='div4' sx={{boxShadow: 3,
+     <Box className='div4' sx={{
          justifyContent:'center',
         justifyitems:'center',
         display:'flex' }}>
@@ -423,9 +507,33 @@ const style = {
       </div>
      </Box>
      </Grid>
-    </Grid>
-    </Box>
-     {/* </Box> */}
+    
+    
+    
+    <Grid item xs={12} sm={3.5} sx={{
+         justifyContent:'center',
+        justifyitems:'center',
+        display:'flex', }}>
+     <Box className='div4' sx={{
+         justifyContent:'center',
+        justifyitems:'center',
+        display:'flex' }}>
+         <div textAlign={'center'}>
+         <Grid container direction="column" alignItems="center">
+              <Grid item>
+      <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
+        <h3>Languages</h3>
+      </Button>
+      </Grid>
+      </Grid>
+      </div>
+     </Box>
+     </Grid>
+     </Grid>
+     </Box>
+
+   
+
     <Box className='footer'>
     <br></br><br />
      <footer >
@@ -438,16 +546,13 @@ const style = {
     <TwitterIcon/>
     </footer> 
     </Box>
-
+  
     <Modal   
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 isOpen={openModal}
                 onClose={handleModalClose}
-                closeAfterTransition
-                  
-              
-            >
+                closeAfterTransition>
                 <Fade in={openModal}>
                     <Box sx={{
                         display: 'flex',
@@ -484,8 +589,7 @@ const style = {
                 </Fade>
             </Modal>
       
-    </div>
-
+            </div> 
   );
 }
 

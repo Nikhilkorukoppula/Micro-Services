@@ -14,27 +14,83 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import {useLocation, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { useState,useEffect } from 'react';
+
+
 
 const drawerWidth = 240;
-const navItems = ['Home', 'Logout', 'About','Contact'];
+const navItems = ['Home', 'Contact', 'About','Logout'];
+
 
 function DrawerAppBar(props) {
 
-
+  const navigate = useNavigate()
 
     const {aboutRef} = props
-    const scrollToAbout =(section) => {
-        console.log(section)
-            if (section === 'About' && aboutRef.current) {
-               
-              aboutRef.current.scrollIntoView({ behavior: 'smooth' });
-            }
-          };
-  
     const handleLinkClick = (section) => {
-            scrollToAbout(section);
-            handleDrawerToggle();
-          };
+      if(section==='Logout'){
+        Swal.fire({
+          icon: "warning",
+          iconColor:"#d50000",
+          title: 'Do you want to Leave?',
+          showCancelButton: true,
+          confirmButtonColor: '#2196F3',
+          confirmButtonText:'yes',
+          cancelButtonColor: '#d50000'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            sessionStorage.clear()
+           
+            Swal.fire({ 
+              position: 'center',
+              icon: 'success',
+              title: 'Logout successfully completed ! Redirecting to Login page...',
+              showConfirmButton: false,
+              timer: 1500
+            })
+           
+          navigate('/login');
+          } 
+        })
+       
+      }
+      
+      else if(section==='About'){
+      scrollToAbout();
+      return;
+      }
+      else if(section==='Home'){
+        return
+      }
+      else if(section==='Contact'){
+        return
+      }
+      handleDrawerToggle();
+    };
+
+    useEffect(()=>{
+    //  window.location.reload()
+    },[])
+    
+    const scrollToAbout = () => {
+      if (aboutRef.current) {
+        aboutRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    // const scrollToAbout =(section) => {
+      
+    //     console.log(section)
+    //         if (section === 'About' && aboutRef.current) {
+               
+    //           aboutRef.current.scrollIntoView({ behavior: 'smooth' });
+             
+    //         }
+          
+    //       };
+  
+    
         
 
   const { window } = props;
@@ -105,7 +161,7 @@ function DrawerAppBar(props) {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth ,overflowY: 'auto'},
           }}
         >
           {drawer} 

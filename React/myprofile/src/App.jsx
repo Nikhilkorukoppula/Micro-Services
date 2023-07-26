@@ -17,8 +17,7 @@ import ForgotPassword from './pages/login/forgotPassword';
         <Route path='/login/createProfile' element={<CreateProfile/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path="/login/forgot-password/" element={<ForgotPassword />} />
-          <Route path="/profile/" element={<Profile />} >
-          </Route>
+          <Route path="/profile/" element={<Profile />} />
         </Routes>
         </BrowserRouter>
 

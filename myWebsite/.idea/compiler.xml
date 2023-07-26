@@ -7,17 +7,25 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="eidiko_recruitment_service" />
         <module name="myWebsite" />
         <module name="Authentication" />
         <module name="pdfReader" />
-        <module name="eidiko-leaves-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="eidiko-employee-service" target="17" />
+      <module name="eidiko-leaves-service" target="17" />
+      <module name="eidiko-reporting-manager-service" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Authentication" options="-parameters" />
+      <module name="eidiko-employee-service" options="-parameters" />
       <module name="eidiko-leaves-service" options="-parameters" />
+      <module name="eidiko-reporting-manager-service" options="-parameters" />
+      <module name="eidiko_recruitment_service" options="-parameters" />
       <module name="myWebsite" options="-parameters" />
       <module name="pdfReader" options="-parameters" />
     </option>

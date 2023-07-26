@@ -5,6 +5,7 @@ import { BeatLoader} from 'react-spinners';
 import axios from "axios";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import Loading from "../Loading Component/loading";
  
 function ForgotPassword() {
     const [email, setEmail] = useState('');
@@ -79,17 +80,21 @@ function ForgotPassword() {
             console.log("error occured in the request")
             setIsloading(false)
             Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!',
-              })
+              position: 'center',
+              icon: 'warning',
+              title: 'Please enter valid mail ID',
+              showConfirmButton: false,
+              timer: 1500
+            })
             };
 
         setEmail('')   
     }
 
     return(
-           isLoading?<BeatLoader color="#36d7b7" style={{justifyContent:'cenetr'}}/>:<div style={{justifyItems:'center',
+      isLoading? <Loading/>
+          
+           :<div style={{justifyItems:'center',
                         justifyContent:'center',
                         alignItems:'cenetr', 
                         alignContent:'center',
