@@ -21,6 +21,10 @@ import jwt_decode from 'jwt-decode';
 import Swal from 'sweetalert2';
 import Divider from '@mui/material/Divider';
 import { PieChart, Pie } from 'recharts';
+import { baseUrl, myAxios } from '../../Server/MyAxios';
+import { service } from '../../Services/Services';
+import { toast } from 'react-toastify';
+
  function Profile() {
 
   // const token = sessionStorage.getItem("token")
@@ -33,7 +37,13 @@ import { PieChart, Pie } from 'recharts';
   const [scrollCount, setScrollCount] = useState(0);
   const [showAvatar, setShowAvatar] = useState(true);
   const [hoveredItem, setHoveredItem] = useState(false); 
+
+
   const email=sessionStorage.getItem("id")
+  const token = sessionStorage.getItem("token");
+
+
+
   const handleMouseEnter = () => {
     setHoveredItem(true);
   };
@@ -41,29 +51,14 @@ import { PieChart, Pie } from 'recharts';
   const handleMouseLeave = () => {
     setHoveredItem(false);
   }
-  const interceptor = (request) => { 
-    const token = sessionStorage.getItem("token");
-   
-    if (!token) {
-      throw new Error("JWT token not found");
-    }
-   
-    request.headers.Authorization= `Bearer ${token}`;
-   
-    return request;
-  };
-
-    const jwt=axios.interceptors.request.use(interceptor); 
- 
-
 
   const handleClick = async () => {
     try{
-     await axios.get(`http://localhost:8085/api/V1/myprofile/getAll/${email}`,jwt).then((response)=>{
+     await service.getAllDetails().then((response)=>{
  
       if (response.status === 200) {
-        console.log(response.data.result);
-        setData2(response.data.result);
+        console.log(response.result);
+        setData2(response.result);
         setVisible(!visible);
       } else if (response.status === 403) {
         console.error(response.data.message);
@@ -83,11 +78,10 @@ import { PieChart, Pie } from 'recharts';
      const handleClick1 = async () => {
       
      
-      await axios.get(`http://localhost:8085/api/V1/myprofile/getDesc/${email}`,jwt).then((res)=>{
-        console.log(res.data.result)
+      await service.getDescription().then((res)=>{
+        console.log(res.result)
         if(res.status===200){
-          setDescription(res.data.result)
-           console.log(description)
+          setDescription(res.result)
           setVisible1(!visible1);
         }
         else{
@@ -101,7 +95,24 @@ import { PieChart, Pie } from 'recharts';
        })
     
      }
-    
+     const handleAboutSubmit =async(e)=>{
+      e.preventDefault()
+      try{
+      await service.updateDescription(description).then((res)=>{
+        console.log(res)
+        if(res.status===200){
+          Swal.fire({
+            width: '400px',
+            title: 'Updated Successfully',
+            timer: '1000'
+          });
+        }
+      })
+      }
+      catch(error){
+        console.error(error)
+      }
+    }
     
      const fileInputRef = useRef(null);
 
@@ -109,7 +120,7 @@ const handleUploadButtonClick = () => {
   fileInputRef.current.click();
 };
 
-     const getPic=(`http://localhost:8085/api/V1/myprofile/getPic/${email}`)
+     const getPic=`${baseUrl}/getPic/${email}`
     
     const handleProfileChange = (file) => {
       let form =new FormData()  //for uploading mulitpart file 
@@ -118,9 +129,10 @@ const handleUploadButtonClick = () => {
 
     axios({ //it is used to call the service to conmplt the operation(upload)
       method: "put",
-      url: `http://localhost:8085/api/V1/myprofile/uploadPic/${email}`,jwt,
-      data: form,
-      headers: { "Content-Type": 'multipart/form-data'},
+      url: `${baseUrl}/uploadPic/${email}`,
+      data:form,
+      headers: { "Content-Type": 'multipart/form-data' ,"Authorization" : 'Bearer ' + token},
+    
     })
       .then((response) => {
         console.log(response.data);
@@ -133,6 +145,8 @@ const handleUploadButtonClick = () => {
         console.error(error);
       });
   };
+
+  
 
     //  const scrollToAbout = () => {
     //    aboutRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -163,12 +177,7 @@ const handleUploadButtonClick = () => {
   }
   }, [scrollCount]);
 
-  const handleAboutSubmit =async()=>{
-    await axios.put(`http://10.0.0.24:8085/api/V1/myprofile/update/${email}`,{
-      "description":description,
-      jwt
-    })
-  }
+ 
   const [open, setOpen] = React.useState(false);
 
   const [openModal, setOpenModal] = React.useState(false);
@@ -478,9 +487,11 @@ if (token) {
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Education</h3>
       </Button>
-      <PieChart>
-        <Pie></Pie>
+      <div>
+      <PieChart style={{width:'100px', height:'50px'}}>
+        <Pie data={"dfjvdfjkv"} outerRadius={250} fill="green">dfgbvh</Pie> 
       </PieChart>
+      </div>
       </Grid>
       </Grid>
       </div>

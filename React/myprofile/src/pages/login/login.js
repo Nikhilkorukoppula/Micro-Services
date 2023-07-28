@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './login.css';
-import { Box, Grid, Button, TextField, useMediaQuery } from '@mui/material';
+import { Box, Grid, Button, TextField, useMediaQuery, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
@@ -111,35 +111,38 @@ console.log(email,password)
         <Box className="main-div" sx={{ justifyContent: 'center', boxShadow: 20, borderRadius: '10px', display: 'flex' }}>
          
           <Grid container spacing={isMobile ? 2 : 4} >
-           
+         
             <Grid item xs={12} >
-            <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
-            <h2>Login/SignUp</h2>
+            <Grid sx={{ justifyContent: 'center', display: 'flex',width:'400px',height:'30px',marginTop:'50px' }}>
+            <Typography style={{fontFamily:'Segoe Script', fontSize:'30px'}}>Login</Typography> 
             </Grid> 
-            <Grid sx={{ justifyContent: 'center', display: 'flex' }}>
-                    <ColorSwitches/>
-                    </Grid> 
-              <Box className="inside-div" sx={{ justifyContent: 'center', display: 'flex' , transition: 'transform 0.5s ease',
-                                                transform: `rotateY(${isRotated ? '180deg' : '0deg'})`}}>
-                <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="center" sx={{ justifyContent: 'center'}}>
+                <Grid container spacing={0} direction={isMobile ? 'column' : 'row'}  style={{ justifyContent: 'center',alignItems:'center', display:'flex', width:'200px', marginTop:'70px',justifyItems:'center'}}>
+                
                   <Grid item xs={12} md={isMobile ? 12 : 6}>
-                     
-                   
-                    <TextField id="email"  label="Email" variant="filled" type="email" onChange={handleEmail} />
+                    <TextField id="email"  label="Email" variant="filled" type="email" onChange={handleEmail} style={{width:'250px',marginLeft:'30px'}} />
                   
-                    <TextField id="password" label="Password" variant="filled" type="password" onChange={handlePassword} />
-                 
-                    <h4 onClick={() => navigate('/login/forgot-password')} style={{ color: '#263238', cursor: 'pointer' }}>
-                      Forgot Password?
-                    </h4>
-                 
-                    <Button variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
-                      Login
+                    <TextField id="password" label="Password" variant="filled" type="password" onChange={handlePassword} style={{width:'250px',marginLeft:'30px'}}/>
+                  
+                <Grid style={{justifyContent:'flex-end',display:'flex',width:'280px'}}>
+                    <Typography onClick={() => navigate('/login/forgot-password')} style={{ color: '#263238', cursor: 'pointer',display:'flex', fontFamily:'Times New Roman', fontSize:'17px' }}>
+                      Forgot Password
+                    </Typography>  
+                    </Grid><br></br>
+                    <Grid  style={{justifyContent:'center',display:'flex',width:'280px'}}>
+                    <Button style={{borderRadius:'20px'}}variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
+                      Login 
                     </Button>
-                  </Grid>
+                    </Grid ><br></br>
+                    <Grid style={{justifyContent:'flex-start',display:'flex',width:'280px',borderTopStyle:'ridge'}} sx={{transition: 'transform 0.5s ease',
+                                                transform: `rotateY(${isRotated ? '180deg' : '0deg'})`}}>
+                   <Typography style={{fontSize:'16px',marginTop:'18px'}}>Click for Signup</Typography>&nbsp; <p> 👉</p> &nbsp;&nbsp;&nbsp; 
+                  <Grid style={{display:'flex', marginTop:'12px'}}><ColorSwitches/></Grid>
+                    </Grid>
+                    </Grid> 
+                   
                 </Grid>
                 
-              </Box>
+             {/* </Box> */}
             
             </Grid>
             
