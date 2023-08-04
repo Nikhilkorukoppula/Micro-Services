@@ -36,6 +36,10 @@ function Login() {
     };
   }, []);
 
+  useEffect(()=>{
+   // window.location.reload()
+  },[]);
+
   const handleClick = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -75,6 +79,7 @@ console.log(email,password)
         navigate('/login');
       }
     } catch (error) {
+      console.log(error)
       setIsLoading(false);
       window.location.reload()
       Swal.fire({

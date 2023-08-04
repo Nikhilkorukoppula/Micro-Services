@@ -1,18 +1,20 @@
 
 server:
-  port: 8086
-
+  port: 8087
+#debug: true
+#logging:
+#  level:
+#    root: DEBUG
 spring:
   data:
     mongodb:
-      url: mongodb+srv://nikhil:nikhil@cluster0.rl7ujaw.mongodb.net/Nikhildb?retryWrites=true&w=majority
+      uri: mongodb+srv://nikhil:nikhil@cluster0.rl7ujaw.mongodb.net/Nikhildb?retryWrites=true&w=majority
       database: Nikhildb
       port: 27017
   mongodb:
     hibernate:
       ddl-auto: update
       show-sql: true
-
 
 # Mail Configuration
   mail:

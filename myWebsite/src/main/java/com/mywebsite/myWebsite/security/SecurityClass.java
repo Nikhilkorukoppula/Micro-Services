@@ -37,7 +37,7 @@ public class SecurityClass {
      SecurityFilterChain http(HttpSecurity httpSecurity) throws Exception{
          return httpSecurity.csrf().disable().cors().configurationSource(corsConfigurationSource()).and()
                  .authorizeHttpRequests()
-                 .requestMatchers("api/V1/myprofile/login","api/V1/myprofile/add","api/V1/myprofile/forgot-mail","api/V1/myprofile/getPic/**").permitAll()
+                 .requestMatchers("api/V1/myprofile/login","api/V1/myprofile/add","api/V1/myprofile/forgot-mail","api/V1/myprofile/getPic/**","api/v1/education/**").permitAll()
                  .anyRequest()
                  .authenticated()
                  .and().sessionManagement()

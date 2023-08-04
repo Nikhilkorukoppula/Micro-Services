@@ -74,7 +74,7 @@ public class MyProfileController {
 	}
 
 	@GetMapping("getPic/{email}")
-	public Resource getPic(@PathVariable("email") String email) throws IOException {
+	public byte[] getPic(@PathVariable("email") String email) throws IOException {
 		return myProfileService.getPic(email);
 	}
 	@PutMapping("update/{email}")
@@ -117,4 +117,6 @@ public class MyProfileController {
          return myProfileService.forgotMail(myProfile.getEmail(),baseUrl);
 		}
 	}
+
+
 }

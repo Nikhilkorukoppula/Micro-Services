@@ -1,11 +1,13 @@
 package com.mywebsite.myWebsite.service;
 
-import java.io.IOException;
+import java.io.File; 
+import java.io.IOException; 
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.*;
 
 
+import com.mywebsite.myWebsite.entities.Education;
 import com.mywebsite.myWebsite.entities.Sequence;
 import com.mywebsite.myWebsite.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.client.MongoClient;
 import com.mywebsite.myWebsite.dto.MyProfileDto;
 import com.mywebsite.myWebsite.entities.MyProfile;
 import com.mywebsite.myWebsite.repository.MyProfileRepository;
+
+import jakarta.annotation.PreDestroy;
+
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +42,20 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Service
 public class MyProfileService {
 
+	//  private final MongoClient mongoClient;
+	  
+	  private final MongoOperations mongoOperations;
 
+	    public MyProfileService(MongoOperations mongoOperations) {
+	        this.mongoOperations = mongoOperations;
+			
+			
+	    }
+
+//	    @PreDestroy
+//	    public void cleanUp() {
+//	        mongoClient.close();
+//	    }
 	Map<String,Object>map=new HashMap<>();
 
 	@Autowired
@@ -54,22 +73,28 @@ public class MyProfileService {
 	private JavaMailSender javaMailSender;
 
 
-  private final MongoOperations mongoOperations;
+ 
 
-	public MyProfileService( MongoOperations mongoOperations) {
-		this.mongoOperations = mongoOperations;
-	}
+	
+	
+	  public int getNextSequence() { 
+		  Query query = new Query(where("_id").is(MyProfile.SEQUENCE_NAME)); 
+		  Update update = new Update().inc("sequenceValue", 1);
+		  FindAndModifyOptions options = options().returnNew(true).upsert(true);
+	  
+	  Sequence sequence = mongoOperations.findAndModify(query, update, options, Sequence.class); 
+	  Assert.notNull(sequence, "Unable to get sequence value for key: " + MyProfile.SEQUENCE_NAME);
+	  
+	  return sequence.getSequenceValue(); 
+	  } 
+	  
+	  public void saveEducation(Education education) { 
+		  int educationId = getNextSequence();
+	  education.setEducationId(educationId);
+	  mongoOperations.insert(education,  "education"); 
+	  }
+	 
 
-	public int getNextSequence() {
-		Query query = new Query(where("_id").is(MyProfile.SEQUENCE_NAME));
-		Update update = new Update().inc("sequenceValue", 1);
-		FindAndModifyOptions options = options().returnNew(true).upsert(true);
-
-		Sequence sequence = mongoOperations.findAndModify(query, update, options, Sequence.class);
-		Assert.notNull(sequence, "Unable to get sequence value for key: " + MyProfile.SEQUENCE_NAME);
-
-		return sequence.getSequenceValue();
-	}
 
 	public ResponseEntity<Map<String,Object>> forgotMail(String email,String resetUrl){
 		MyProfile myProfile=this.myProfileRepository.getByEmail(email);
@@ -211,18 +236,21 @@ public class MyProfileService {
 		return ResponseEntity.ok(map);
 	}
 
-	public Resource getPic(String email){
+	public byte[] getPic(String email) throws IOException{
 		MyProfile myProfile=myProfileRepository.getByEmail(email);
 		Map<String,Object>map=new HashMap<>();
 		String fileName=myProfile.getProfile();
+		byte[] data=null;
 		try {
 			Path file = Paths.get(folderLocation).resolve(fileName);
+			data=Files.readAllBytes(new File(folderLocation+fileName).toPath());
 			Resource resource =  new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				return resource;
-			} else {
-				throw new RuntimeException("Could not read the file!");
-			}
+//			if (resource.exists() || resource.isReadable()) {
+//				return resource;
+//			} else {
+//				throw new RuntimeException("Could not read the file!");
+//			}
+			return data;
 		}
 		catch (MalformedURLException e) {
 			throw new RuntimeException("Error: " + e.getMessage());
@@ -253,5 +281,6 @@ public class MyProfileService {
 		map.put("status", HttpStatus.OK.value());
 		return ResponseEntity.ok(map);
 	}
+
 
 }

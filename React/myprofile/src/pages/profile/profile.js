@@ -1,9 +1,9 @@
 
-import { Avatar, Box,Grid, Button, TextField,Fade, Backdrop, Drawer} from '@mui/material';
+import { Avatar, Box,Grid, Button, TextField,Fade, Backdrop, Drawer, Typography} from '@mui/material';
 import './profile.css';  
 import * as React from 'react';
 import { useState, useEffect , useRef} from 'react';
-import {Create } from '@mui/icons-material';
+import {Create, Key } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -16,14 +16,45 @@ import DrawerAppBar from '../../navbar/navbar';
 import { Navigate, useNavigate } from 'react-router-dom';
 import UserDetails from './Details';
 import Details from './Details';
-import { Container, Modal } from 'reactstrap';
+import {  Modal } from 'reactstrap';
 import jwt_decode from 'jwt-decode';
 import Swal from 'sweetalert2';
-import Divider from '@mui/material/Divider';
-import { PieChart, Pie } from 'recharts';
-import { baseUrl, myAxios } from '../../Server/MyAxios';
+import { baseUrl } from '../../Server/MyAxios';
 import { service } from '../../Services/Services';
-import { toast } from 'react-toastify';
+import ReactApexChart from 'react-apexcharts';
+
+export  const ApexChart = () => {
+  const chartData = {
+    series: [{
+      data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+    }],
+    options: {
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      xaxis: {
+        categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'Germany'],
+      }
+    }
+  };
+
+  return (
+    <div id="chart">
+      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={350} />
+    </div>
+  );
+};
+
 
  function Profile() {
 
@@ -41,8 +72,6 @@ import { toast } from 'react-toastify';
 
   const email=sessionStorage.getItem("id")
   const token = sessionStorage.getItem("token");
-
-
 
   const handleMouseEnter = () => {
     setHoveredItem(true);
@@ -183,24 +212,19 @@ const handleUploadButtonClick = () => {
   const [openModal, setOpenModal] = React.useState(false);
   const handleModalOpen = () => {
     setOpenModal(true);
+    document.body.style.overflow = 'scroll';
 }
   const handleModalClose = () => {setOpenModal(false);
 
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = 'scro';
   }
-  useEffect(() => {
-}, [openModal]);
-
 const style = {
-  position: 'absolute',
-  top:'10%',
-  left: '50%',
-  transform: 'translate(-50%, -250%)',
+  transform: 'translate(0%,200%)',
   width: 400,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
-  overflowY:'hidden'
+  
  
     // position: 'fixed',
     // top: '300px',
@@ -268,12 +292,15 @@ if (token) {
 }
 };
 
+
+
   return (
   
-    <div className="App"  item xs={12}
+    <div className="App" item={'true'} xs={12}
     sx={{ justifyContent:'center',
            justifyitems:'center',
-           display:'flex' }}  >
+           display:'flex',
+           }}  >
              <DrawerAppBar aboutRef={aboutRef} />
              
            
@@ -301,15 +328,14 @@ if (token) {
            sx={{
             boxShadow: 0, justifyContent:'center',
            justifyitems:'center',
-           display:'flex' ,transition:'opacity 0.5s'}} >
+           display:'flex' ,transition:'0.3s ease'}} >
               
       
-          {showAvatar && (
-          <Avatar item  xs={12}  className='Avatar'
-          sx={{transition:'opacity 1s'}}
-          style={{backgroundImage: `url(${getPic})`, width: '100px', height: '100px'}}
+          {showAvatar ? (
+          <Avatar xs={12}  className='Avatar'
+          style={{backgroundImage: `url(${getPic})`||'profile', width: '100px', height: '100px', }}
          >
-          <form enctype="multipart/form-data" >
+          <form encType="multipart/form-data" >
          <input  type='file' className='my_file' onChange={handleProfileChange}  ref={fileInputRef}/>
 
            <CameraAltIcon style={{marginLeft:'45px', opacity: hoveredItem ? 1 : 0, transition:'1s'}}  
@@ -317,16 +343,11 @@ if (token) {
            onMouseLeave={handleMouseLeave} 
            onClick={handleUploadButtonClick}
          >
-          
-           </CameraAltIcon>
-
-        
+           </CameraAltIcon>        
          </form>
         </Avatar> 
         
-        )}
-         
-        {!showAvatar && (
+        ):(
         
          <p className='avatar-name'>Nikhil <br></br>
           <br></br></p> 
@@ -359,7 +380,7 @@ if (token) {
             }}
           >
             <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid >
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
@@ -369,9 +390,9 @@ if (token) {
                 </Button>
               </Grid>
 
-              <Grid item>
+              <Grid >
                 <Grid
-                  textAlign="justify"
+                  textalign="justify"
                   item
                   xs={12}
                   padding="25px"
@@ -404,7 +425,7 @@ if (token) {
           
           >
             <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid>
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
@@ -414,24 +435,25 @@ if (token) {
                 </Button>
               </Grid>
 
-              <Grid item>
-                <Grid textAlign="justify" display="flex">
+              <Grid>
+                <Grid textalign="justify" display="flex">
                   {visible &&
                     data2.map((item) => (
-                      <h4
+                      <Typography
                         style={{
                           fontFamily: 'initial',
                           fontStyle: 'oblique',
-                          color: 'darkcyan',
+                          color: 'blueviolet',
                           fontSize: '20px'
                         }}
-                      >
-                        Name: {item.name} <br />
+                      key={'index'}>
+                       Name: {item.name}<br />
                         Email: {item.email} <br />
                         Contact No: {item.contactNo} <br />
                         Gender: {item.gender} <br />
                         DOB: {item.dateOfBirth}
-                      </h4>
+                      </Typography>
+
                     ))}
                 </Grid>
               </Grid>
@@ -449,7 +471,7 @@ if (token) {
             }}
           >
             <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid>
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
@@ -481,16 +503,14 @@ if (token) {
          justifyContent:'center',
         justifyitems:'center',
         display:'flex' }}>
-         <div textAlign={'center'}>
+         <div textalign={'center'}>
          <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid >
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Education</h3>
       </Button>
       <div>
-      <PieChart style={{width:'100px', height:'50px'}}>
-        <Pie data={"dfjvdfjkv"} outerRadius={250} fill="green">dfgbvh</Pie> 
-      </PieChart>
+      <ApexChart/>  
       </div>
       </Grid>
       </Grid>
@@ -507,9 +527,9 @@ if (token) {
          justifyContent:'center',
         justifyitems:'center',
         display:'flex' }}>
-         <div textAlign={'center'}>
+         <div textalign={'center'}>
          <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid >
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Skills</h3>
       </Button>
@@ -529,9 +549,9 @@ if (token) {
          justifyContent:'center',
         justifyitems:'center',
         display:'flex' }}>
-         <div textAlign={'center'}>
+         <div textalign={'center'}>
          <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid>
       <Button className='button3' style={{marginTop:"20px",height:"50px"}}>
         <h3>Languages</h3>
       </Button>
@@ -564,9 +584,10 @@ if (token) {
                 isOpen={openModal}
                 onClose={handleModalClose}
                 closeAfterTransition>
-                <Fade in={openModal}>
-                    <Box sx={{
+                <Fade in={openModal}> 
+                    <Box sx={{ 
                         display: 'flex',
+                        position:'sticky',
                         alignItems: 'center',
                         justifyContent: 'center',
                     }}>

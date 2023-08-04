@@ -2,14 +2,15 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    position: relative;
+    position: absolute;
+    overflow: visible;
     /* background-image: url(computer-1867758_1920-min.jpg);
      */
     
    }
   
   .div1{
-    display: block;
+    display: flex;
     width: 100%;
     background-color: lightgrey;
     height: 40px;
@@ -111,7 +112,7 @@
     display: flex;
     justify-content: center;
     margin-top: -30px;
-    overflow: hidden;
+
   }
   
   .avatar-div{
