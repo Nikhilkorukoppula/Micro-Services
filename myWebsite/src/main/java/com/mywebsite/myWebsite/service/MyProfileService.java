@@ -52,10 +52,6 @@ public class MyProfileService {
 			
 	    }
 
-//	    @PreDestroy
-//	    public void cleanUp() {
-//	        mongoClient.close();
-//	    }
 	Map<String,Object>map=new HashMap<>();
 
 	@Autowired
@@ -88,12 +84,6 @@ public class MyProfileService {
 	  return sequence.getSequenceValue(); 
 	  } 
 	  
-	  public void saveEducation(Education education) { 
-		  int educationId = getNextSequence();
-	  education.setEducationId(educationId);
-	  mongoOperations.insert(education,  "education"); 
-	  }
-	 
 
 
 	public ResponseEntity<Map<String,Object>> forgotMail(String email,String resetUrl){
@@ -243,7 +233,7 @@ public class MyProfileService {
 		byte[] data=null;
 		try {
 			Path file = Paths.get(folderLocation).resolve(fileName);
-			data=Files.readAllBytes(new File(folderLocation+fileName).toPath());
+			data=Files.readAllBytes(file);
 			Resource resource =  new UrlResource(file.toUri());
 //			if (resource.exists() || resource.isReadable()) {
 //				return resource;
@@ -281,6 +271,85 @@ public class MyProfileService {
 		map.put("status", HttpStatus.OK.value());
 		return ResponseEntity.ok(map);
 	}
+
+	public ResponseEntity<Map<String, Object>> updateEducation(String email, List<Education> education) {
+		
+		MyProfile byEmail = this.myProfileRepository.getByEmail(email);
+		if(email!=null) {
+			byEmail.setEducation(education);
+			this.myProfileRepository.save(byEmail);
+			map.put("message", "updated");
+			map.put("status", HttpStatus.OK.value());
+		}
+		else {
+			map.put("message", "No Data Found");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			throw new NullPointerException("no data found");
+
+		}
+		return ResponseEntity.ok(map);
+	}
+
+
+
+	public ResponseEntity<Map<String, Object>> updateSkills(String email, List<String> skills) {
+		
+		MyProfile byEmail = this.myProfileRepository.getByEmail(email);
+		if(email!=null) {
+			byEmail.setSkills(skills);
+			this.myProfileRepository.save(byEmail);
+			map.put("message", "updated");
+			map.put("status", HttpStatus.OK.value());
+		}
+		else {
+			map.put("message", "No Data Found");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			throw new NullPointerException("no data found");
+
+		}
+		return ResponseEntity.ok(map);
+		
+	}
+
+public ResponseEntity<Map<String, Object>> updateLanguages(String email, List<String> languages) {
+		
+		MyProfile byEmail = this.myProfileRepository.getByEmail(email);
+		if(email!=null) {
+			byEmail.setLanguages(languages);
+			this.myProfileRepository.save(byEmail);
+			map.put("message", "updated");
+			map.put("status", HttpStatus.OK.value());
+		}
+		else {
+			map.put("message", "No Data Found");
+			map.put("status", HttpStatus.NOT_FOUND.value());
+			throw new NullPointerException("no data found");
+
+		}
+		return ResponseEntity.ok(map);
+		
+	}
+
+public ResponseEntity<Map<String, Object>> updateExperience(String email, List<String> experience) {
+	
+	MyProfile byEmail = this.myProfileRepository.getByEmail(email);
+	if(email!=null) {
+		byEmail.setExperience(experience);
+		this.myProfileRepository.save(byEmail);
+		map.put("message", "updated");
+		map.put("status", HttpStatus.OK.value());
+	}
+	else {
+		map.put("message", "No Data Found");
+		map.put("status", HttpStatus.NOT_FOUND.value());
+		throw new NullPointerException("no data found");
+
+	}
+	return ResponseEntity.ok(map);
+	
+}
+
+
 
 
 }

@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import Loading from '../Loading Component/loading';
 import Switch from '@mui/material/Switch';
 import ColorSwitches from '../Loading Component/switch';
+import { Source } from '@mui/icons-material';
+import { baseUrl, myAxios } from '../../Server/MyAxios';
 
 function Login() {
   const [isRotated, setIsRotated] = useState(false);
@@ -19,7 +21,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const loginButtonRef = useRef();
-  const isMobile = useMediaQuery('(max-width: 600px)'); // Adjust the breakpoint value as needed
+  const isMobile = useMediaQuery('(max-width: 400px)'); // Adjust the breakpoint value as needed
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -45,11 +47,11 @@ function Login() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8086/api/V1/myprofile/login', {
+      const response = await axios.post(`${baseUrl}/login`, {
         email: email,
         password: password
       });
-console.log(email,password)
+     console.log(email,password)
       if (response.status === 200) {
         sessionStorage.setItem('token', response.data.Token);
         sessionStorage.setItem('id', email);
@@ -114,30 +116,32 @@ console.log(email,password)
         <Loading />
       ) : (
         <Box className="main-div" sx={{ justifyContent: 'center', boxShadow: 20, borderRadius: '10px', display: 'flex' }}>
+       
+          <Grid container spacing={isMobile ? 2 : 4} item xs={12}  md={isMobile ? 12 : 6} style={{justifyContent:'center'}}>
          
-          <Grid container spacing={isMobile ? 2 : 4} >
-         
-            <Grid item xs={12} >
-            <Grid sx={{ justifyContent: 'center', display: 'flex',width:'400px',height:'30px',marginTop:'50px' }}>
+           
+            <Box sx={{ justifyItems: 'center', display: 'fixed',height:'30px',marginTop:'90px',}}> 
             <Typography style={{fontFamily:'Segoe Script', fontSize:'30px'}}>Login</Typography> 
-            </Grid> 
-                <Grid container spacing={0} direction={isMobile ? 'column' : 'row'}  style={{ justifyContent: 'center',alignItems:'center', display:'flex', width:'200px', marginTop:'70px',justifyItems:'center'}}>
-                
-                  <Grid item xs={12} md={isMobile ? 12 : 6}>
+           
+            </Box> 
+            <Grid sx={{display:'flex',marginTop:'50px',width:'400px',justifyContent:'center'}}>
                     <TextField id="email"  label="Email" variant="filled" type="email" onChange={handleEmail} style={{width:'250px',marginLeft:'30px'}} />
-                  
-                    <TextField id="password" label="Password" variant="filled" type="password" onChange={handlePassword} style={{width:'250px',marginLeft:'30px'}}/>
-                  
+                 </Grid> 
+                 <Grid style={{marginTop:'-30px',height:'10px',display:'flex'}}>
+                    <TextField id="password" label="Password" variant="filled" type="password" onChange={handlePassword} 
+                    style={{width:'250px',marginLeft:'30px'}}/>
+                    </Grid>
+
                 <Grid style={{justifyContent:'flex-end',display:'flex',width:'280px'}}>
                     <Typography onClick={() => navigate('/login/forgot-password')} style={{ color: '#263238', cursor: 'pointer',display:'flex', fontFamily:'Times New Roman', fontSize:'17px' }}>
                       Forgot Password
                     </Typography>  
-                    </Grid><br></br>
+                    </Grid>
                     <Grid  style={{justifyContent:'center',display:'flex',width:'280px'}}>
-                    <Button style={{borderRadius:'20px'}}variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
+                    <Button style={{borderRadius:'20px',height:'40px'}}variant="contained" endIcon={<LoginIcon />} onClick={handleClick} ref={loginButtonRef}>
                       Login 
                     </Button>
-                    </Grid ><br></br>
+                    </Grid >
                     <Grid style={{justifyContent:'flex-start',display:'flex',width:'280px',borderTopStyle:'ridge'}} sx={{transition: 'transform 0.5s ease',
                                                 transform: `rotateY(${isRotated ? '180deg' : '0deg'})`}}>
                    <Typography style={{fontSize:'16px',marginTop:'18px'}}>Click for Signup</Typography>&nbsp; <p> 👉</p> &nbsp;&nbsp;&nbsp; 
@@ -145,13 +149,13 @@ console.log(email,password)
                     </Grid>
                     </Grid> 
                    
-                </Grid>
+                
                 
              {/* </Box> */}
             
-            </Grid>
+           
             
-          </Grid>
+          
           
         </Box>
         

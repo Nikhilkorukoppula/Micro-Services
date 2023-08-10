@@ -2,7 +2,8 @@ package com.mywebsite.myWebsite.entities;
 
 
 import java.time.LocalDate;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -29,70 +30,10 @@ public class MyProfile {
 	private long contactNo;
 	private String address;
     private String password;
-    private  String profile;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public LocalDate getDateOfBirth() {
-		return dateOfBirth;
-	}
-	public void setDateOfBirth(LocalDate dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public long getContactNo() {
-		return contactNo;
-	}
-	public void setContactNo(long contactNo) {
-		this.contactNo = contactNo;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getProfile() {
-		return profile;
-	}
-	public void setProfile(String profile) {
-		this.profile = profile;
-	}
-	public static String getSequenceName() {
-		return SEQUENCE_NAME;
-	}
-
+    private String profile;
+	private List<Education> education=new ArrayList<Education>();
+    private List<String>languages;
+    private List<String> skills;
+    private List<String>experience;
     
 }

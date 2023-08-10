@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
@@ -14,137 +15,30 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import {Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useState,useEffect } from 'react';
-import Modal from '@mui/material/Modal'; 
-import { Avatar, Card, Grid, TextField } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import Modal from '@mui/material/Modal'; 
+import { Avatar, Grid, TextField } from '@mui/material';
+import { baseUrl } from '../../Server/MyAxios';
 import axios from 'axios';
-import { baseUrl } from '../Server/MyAxios';
-import Profilemodal from '../pages/profile/profilemodal';
-
- 
- 
-const drawerWidth = 240;
-const navItems = ['Home','Profile', 'Contact', 'About','Logout'];
+import Profile from './profile';
 
 
+export default function Profilemodal() {
 
-function DrawerAppBar(props) {
-  
-  const[dropProfile,setDropProfile]=useState(false)
-  const[dropDesc,setDropDesc]=useState(false)
-  const[dropExperience,setDropExperience]=useState(false)
-  const[dropEducation,setDropEducation]=useState(false)
-  const[dropSkills,setDropSkill]=useState(false)
-  const[dropLang,setDropLang]=useState(false)
-  const [hoveredItem, setHoveredItem] = useState(false)
-  const [openModal, setOpenModal ] = useState(false);
-  const navigate = useNavigate()
-  const email=sessionStorage.getItem("id")
-  const token=sessionStorage.getItem("token")
-  
+    const[dropProfile,setDropProfile]=useState(false)
+    const[dropDesc,setDropDesc]=useState(false)
+    const[dropExperience,setDropExperience]=useState(false)
+    const[dropEducation,setDropEducation]=useState(false)
+    const[dropSkills,setDropSkill]=useState(false)
+    const[dropLang,setDropLang]=useState(false)
+    const [hoveredItem, setHoveredItem] = useState(false)
+    const [openModal, setOpenModal ] = useState(false);
 
-    const {aboutRef} = props
-
-    const handleLinkClick = (section) => {
-      if(section==='Logout'){
-        Swal.fire({
-          icon: "warning",
-          iconColor:"#d50000",
-          title: 'Do you want to Leave?',
-          showCancelButton: true,
-          confirmButtonColor: '#2196F3',
-          confirmButtonText:'yes',
-          cancelButtonColor: '#d50000'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            sessionStorage.clear()
-           
-            Swal.fire({ 
-              position: 'center',
-              icon: 'success',
-              title: 'Logout successfully completed ! Redirecting to Login page...',
-              showConfirmButton: false,
-              timer: 1500
-            })
-           
-          navigate('/login');
-          } 
-        })
-       
-      }
-      
-      else if(section==='About'){
-      scrollToAbout();
-      return;
-      }
-      else if(section==='Home'){
-        return
-      }
-      else if(section==='Profile'){
-        setOpenModal(!openModal)
-      
-        return 
-    }
-      else if(section==='Contact'){
-        return
-      }
-      handleDrawerToggle();
-    };
-
-    
-    const scrollToAbout = () => {
-      if (aboutRef.current) {
-        aboutRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-
-
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
-
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', backgroundColor:'#4694fa' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Menu
-      </Typography>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item} disablePadding sx={{ justifyContent: 'center' }} >
-            <Button  sx={{ color: 'black' }} onClick={() => handleLinkClick(item)}>
-              <ListItemText primary={item} />
-            </Button>
-          </ListItem>  
-           
-        ))}
-          
-      </List>
-    </Box>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
-
-useEffect(()=>{
-  document.body.style.overflowY = 'visible';
-},[openModal])
-
- const handleModalClose = () => {
-      setOpenModal(false)
-      setDropProfile(false)
-      setDropDesc(false)
-      setDropExperience(false)
-      setDropLang(false)
-      setDropSkill(false)
-      setDropEducation(false)
-  } 
-
+    const email=sessionStorage.getItem("id")
+    const token=sessionStorage.getItem("token")
   const style = {
     position: 'absolute',
     top: '350px',
@@ -183,7 +77,25 @@ setDropProfile(!dropProfile)
   const handleLang=()=>{
     setDropLang(!dropLang)
   }
-  const handleMouseEnter = () => {
+
+ const handleModalClose=()=>{
+    setOpenModal(true)
+    setDropProfile(false)
+    setDropDesc(false)
+    setDropExperience(false)
+    setDropLang(false)
+    setDropSkill(false)
+    setDropEducation(false)
+   
+ }
+ 
+useEffect(()=>{
+    if(openModal){
+    window.location.reload()
+    }
+},[openModal])
+
+const handleMouseEnter = () => {
     setHoveredItem(true);
   };
   
@@ -194,7 +106,7 @@ setDropProfile(!dropProfile)
   const fileInputRef = React.useRef(null);
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
-  }; 
+  };
   
       const getPic=`${baseUrl}/getPic/${email}`
       
@@ -222,66 +134,8 @@ setDropProfile(!dropProfile)
         });
     };
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar component="nav">
-        <Toolbar>
-          <IconButton
-           
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-       
-          <Typography
-            variant="h6" 
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            Menu
-          </Typography>
-         
-          <Box sx={{ display: { xs: 'none', sm: 'block' }}}>
-            {navItems.map((item) => (
-             <Button key={item} sx={{ color: '#fff' }} onClick={() => handleLinkClick(item)}>
-             {item}
-           </Button>
-            
-           ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <Box component="nav">
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth ,overflowY: 'auto'},
-          }}
-        >
-          {drawer} 
-        </Drawer> 
-      </Box>
-    
-       <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={openModal}
-                onClose={handleModalClose}
-                closeAfterTransition>
-       
-       <Card>
-        <Profilemodal/>
-       </Card>
-       </Modal>
-      
-     {/*  <Box sx={{ 
+    <Modal>
+   <Box sx={{ 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -505,15 +359,6 @@ setDropProfile(!dropProfile)
            
         </Box> 
   </Box>
-        
-            </Modal> */}
-     </Box>
-  );
+  </Modal>
+  )
 }
-
-DrawerAppBar.propTypes = {
-
-  window: PropTypes.func,
-};
-
-export default DrawerAppBar;

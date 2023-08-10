@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Loading from "../Loading Component/loading";
 import ColorSwitches from "../Loading Component/switch";
+import { baseUrl } from "../../Server/MyAxios";
 
 function CreateProfile(){
 
@@ -28,7 +29,7 @@ function CreateProfile(){
     const handleSubmit = async(e)=>{
         e.preventDefault()
         setIsloading(true)
-      await axios.post(`http://localhost:8085/api/V1/myprofile/add`,{
+      await axios.post(`${baseUrl}/add`,{
         "name":name,
         "gender":gender,
         "email":email,

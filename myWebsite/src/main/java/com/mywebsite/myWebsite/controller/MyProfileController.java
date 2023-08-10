@@ -2,10 +2,14 @@ package com.mywebsite.myWebsite.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.security.sasl.AuthenticationException;
+
 import com.mywebsite.myWebsite.exception.UserNotFoundException;
+import com.mywebsite.myWebsite.security.JavaTokenExtract;
 import com.mywebsite.myWebsite.security.token.JavaToken;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.mywebsite.myWebsite.entities.Education;
 import com.mywebsite.myWebsite.entities.MyProfile;
 import com.mywebsite.myWebsite.service.MyProfileService;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +42,9 @@ public class MyProfileController {
 
 	@Autowired
 	private JavaToken token;
+	
+
+	
 	
 	@PostMapping("add")
 	public ResponseEntity<Map<String,Object>> add(@RequestBody MyProfile myProfile){
@@ -67,26 +75,27 @@ public class MyProfileController {
 
 	}
 
-	@PutMapping("uploadPic/{email}")
-	public ResponseEntity<Map<String, Object>> uploadPic(@PathVariable("email") String email,
-														 @RequestParam("file")MultipartFile file) throws IOException {
+	@PutMapping("uploadPic")
+	public ResponseEntity<Map<String, Object>> uploadPic(@RequestParam("file")MultipartFile file) throws IOException {
+		String email=JavaTokenExtract.getCurrentUser().getUsername();
 		return myProfileService.uploadPic(email,file);
 	}
 
-	@GetMapping("getPic/{email}")
-	public byte[] getPic(@PathVariable("email") String email) throws IOException {
+	@GetMapping("getPic")
+	public byte[] getPic() throws IOException {
+		String email=JavaTokenExtract.getCurrentUser().getUsername();
 		return myProfileService.getPic(email);
 	}
-	@PutMapping("update/{email}")
-	public ResponseEntity<Map<String,Object>> update(@PathVariable("email") String email,
-													 @RequestBody MyProfile description){
+	@PutMapping("update")
+	public ResponseEntity<Map<String,Object>> update( @RequestBody MyProfile description) throws AuthenticationException{
+		String email=JavaTokenExtract.getCurrentUser().getUsername();
 		return myProfileService.update(email,description);
 	}
 
-	@GetMapping("getAll/{email}")
-	public ResponseEntity<Map<String,Object>> getAll(@PathVariable("email") String mail){
-
-		return myProfileService.getAll(mail);
+	@GetMapping("getAll")
+	public ResponseEntity<Map<String,Object>> getAll() throws AuthenticationException{
+            String email=JavaTokenExtract.getCurrentUser().getUsername();
+		return myProfileService.getAll(email);
 	}
 
 	@GetMapping("getAllDetails")
@@ -95,9 +104,9 @@ public class MyProfileController {
 		return myProfileService.getAllDetails();
 	}
 
-	@GetMapping("getDesc/{email}")
-	public ResponseEntity<Map<String,Object>> getDesc(@PathVariable("email") String email){
-
+	@GetMapping("getDesc")
+	public ResponseEntity<Map<String,Object>> getDesc() throws AuthenticationException{
+		 String email=JavaTokenExtract.getCurrentUser().getUsername();
 		return myProfileService.getDesc(email);
 	}
 
@@ -118,5 +127,31 @@ public class MyProfileController {
 		}
 	}
 
-
+     @PutMapping("update-education")
+     public ResponseEntity<Map<String,Object>> updateEducation(@RequestBody List<Education>education) throws AuthenticationException{
+    	String email=JavaTokenExtract.getCurrentUser().getUsername();
+    	
+    	 return  myProfileService.updateEducation(email,education);
+     }
+     
+     @PutMapping("update-skills")
+     public ResponseEntity<Map<String,Object>> updateSkills(@RequestBody List<String>skills) throws AuthenticationException{
+    	String email=JavaTokenExtract.getCurrentUser().getUsername();
+    	
+    	 return  myProfileService.updateSkills(email,skills);
+     }
+     
+     @PutMapping("update-experience")
+     public ResponseEntity<Map<String,Object>> updateExperience(@RequestBody List<String>experience) throws AuthenticationException{
+    	String email=JavaTokenExtract.getCurrentUser().getUsername();
+    	
+    	 return  myProfileService.updateExperience(email,experience);
+     }
+     @PutMapping("update-language")
+     public ResponseEntity<Map<String,Object>> updateLanguages(@RequestBody List<String>language) throws AuthenticationException{
+    	String email=JavaTokenExtract.getCurrentUser().getUsername();
+    	
+    	 return  myProfileService.updateLanguages(email,language);
+     }
+     
 }

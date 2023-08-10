@@ -8,17 +8,20 @@ import CreateProfile from './pages/login/createProfile';
 import UserDetails from './pages/profile/Details';
 import Details from './pages/profile/Details';
 import ForgotPassword from './pages/login/forgotPassword';
+import Update from './pages/profile/Update';
 
  function App() {
        return(
         
         <BrowserRouter>
-        <Routes>
+        <Routes> 
         <Route path='/login/createProfile' element={<CreateProfile/>}/>
           <Route path='/login' element={<Login/>}/>
           <Route path="/login/forgot-password/" element={<ForgotPassword />} />
-          <Route path="/profile/" element={<Profile />} />
-        </Routes>
+          <Route path="/profile" element={<Profile />}> </Route>
+          <Route path="update-profile" element={<Update />} />
+           
+        </Routes> 
         </BrowserRouter>
 
         );

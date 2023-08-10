@@ -1,5 +1,6 @@
 
-import { Avatar, Box,Grid, Button, TextField,Fade, Backdrop, Drawer, Typography} from '@mui/material';
+import { Avatar, Box,Grid, Button, TextField,Fade,Typography} from '@mui/material';
+import Modal from '@mui/material/Modal'; 
 import './profile.css';  
 import * as React from 'react';
 import { useState, useEffect , useRef} from 'react';
@@ -13,15 +14,13 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import axios from 'axios';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DrawerAppBar from '../../navbar/navbar';
-import { Navigate, useNavigate } from 'react-router-dom';
-import UserDetails from './Details';
-import Details from './Details';
-import {  Modal } from 'reactstrap';
+import {  useNavigate } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
 import Swal from 'sweetalert2';
 import { baseUrl } from '../../Server/MyAxios';
 import { service } from '../../Services/Services';
 import ReactApexChart from 'react-apexcharts';
+import Update from './Update';
 
 export  const ApexChart = () => {
   const chartData = {
@@ -64,7 +63,7 @@ export  const ApexChart = () => {
   const [description, setDescription] = useState();
   const [visible, setVisible] = useState(false);
   const [visible1, setVisible1] = useState(false);
-  const aboutRef = useRef(null);
+  const about = useRef(null);
   const [scrollCount, setScrollCount] = useState(0);
   const [showAvatar, setShowAvatar] = useState(true);
   const [hoveredItem, setHoveredItem] = useState(false); 
@@ -149,13 +148,13 @@ const handleUploadButtonClick = () => {
   fileInputRef.current.click();
 };
 
-     const getPic=`${baseUrl}/getPic/${email}`
+    const getPic=`${baseUrl}/getPic/${email}`
     
     const handleProfileChange = (file) => {
       let form =new FormData()  //for uploading mulitpart file 
       form.append("file",file.target.files[0]) 
    
-
+ 
     axios({ //it is used to call the service to conmplt the operation(upload)
       method: "put",
       url: `${baseUrl}/uploadPic/${email}`,
@@ -214,31 +213,29 @@ const handleUploadButtonClick = () => {
     setOpenModal(true);
     document.body.style.overflow = 'scroll';
 }
-  const handleModalClose = () => {setOpenModal(false);
-
-  document.body.style.overflow = 'scro';
+  const handleModalClose = () => {
+    setOpenModal(false);
   }
 const style = {
-  transform: 'translate(0%,200%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  p: 4,
+  // transform: 'translate(0%,200%)',
+  // width: 400,
+  // bgcolor: 'background.paper',
+  // boxShadow: 24,
+  // p: 4,
   
  
-    // position: 'fixed',
-    // top: '300px',
-    // left: '50%',
-    // transform: 'translate(-50%, -50%)',
-    // transition: 'smooth',
-    // width: 400,
-    // bgcolor: 'background.paper',
-    // boxShadow: 24,
-    // p: 4,
-    // maxHeight: '90vh',
-    // overflowY: 'hidden',
-    // alignItems:'center',
-    // justifyItems:'center'
+    position: 'absolute',
+    top: '300px',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    transition: 'smooth',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    maxHeight: '90vh',
+    overflowY: 'hidden',
+    alignItems:'center',
 };
 
 
@@ -295,14 +292,12 @@ if (token) {
 
 
   return (
-  
+
     <div className="App" item={'true'} xs={12}
     sx={{ justifyContent:'center',
            justifyitems:'center',
-           display:'flex',
            }}  >
-             <DrawerAppBar aboutRef={aboutRef} />
-             
+             <DrawerAppBar aboutRef={about} />
            
       <header className="App-header">
             <img style={{position:'fixed'}} width='100%' height='100%' 
@@ -414,7 +409,7 @@ if (token) {
           </Box>
            </Grid>
         
-        <Grid item xs={12} sm={4}   ref={aboutRef}>
+        <Grid item xs={12} sm={4}   ref={about}>
           <Box
             className="dive"
             sx={{
@@ -581,10 +576,10 @@ if (token) {
     <Modal   
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
-                isOpen={openModal}
+                open={openModal}
                 onClose={handleModalClose}
                 closeAfterTransition>
-                <Fade in={openModal}> 
+               
                     <Box sx={{ 
                         display: 'flex',
                         position:'sticky',
@@ -618,10 +613,11 @@ if (token) {
                         </Box>
                     </Box>
                   
-                </Fade>
+              
             </Modal>
       
             </div> 
+           
   );
 }
 

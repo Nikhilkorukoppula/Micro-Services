@@ -12,10 +12,12 @@
         <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-reporting-manager-service/pom.xml" />
         <option value="$PROJECT_DIR$/../../eidiko_recruitment_service/pom.xml" />
         <option value="$PROJECT_DIR$/../../../SampleBatchProcessing-main/SampleBatchProcessing-main/pom.xml" />
+        <option value="$PROJECT_DIR$/../../../GitHub/Employee_Portal/eidiko-employee-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-employee-service_1/pom.xml" />
         <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-leaves-service/pom.xml" />
         <option value="$PROJECT_DIR$/../../Eidiko_Internal_Portal/eidiko-reporting-manager-service/pom.xml" />
       </set>
