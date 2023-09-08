@@ -1,6 +1,6 @@
-personal token : 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
+personal token : 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
 
-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
+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
 
 
-eidiko token :  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
+eidiko token :  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

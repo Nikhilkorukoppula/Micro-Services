@@ -1,0 +1,10 @@
+server:
+  port: 9999
+
+
+logging:
+   file:
+    name: "C:/testlog/sserror.log"
+   logback:
+    rollingpolicy:
+      file-name-pattern: C:/testlog/sserror-%d{yyyy-MM-dd}.%i.log 
