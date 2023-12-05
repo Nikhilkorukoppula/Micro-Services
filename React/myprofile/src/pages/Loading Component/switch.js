@@ -81,7 +81,7 @@ const handleClick=()=>{
   return (
     <FormGroup>
       <FormControlLabel
-              control={<IOSSwitch sx={{ m: 1 }} onClick={handleClick} defaultUnChecked />}
+              control={<IOSSwitch sx={{ m: 1 }} onClick={handleClick}  />}
       />   
     </FormGroup>
   );

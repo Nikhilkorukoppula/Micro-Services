@@ -13,9 +13,12 @@ public class JavaTokenExtract {
 		
 	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 	if(auth != null && auth.isAuthenticated()) {
+		System.out.println(auth);
 		Object principal = auth.getPrincipal();
+		System.out.println(principal);
 		if(principal != null) {
 			SecurityConfig config = (SecurityConfig) principal;
+			System.out.println(config);
 			return config;
 		}
 		

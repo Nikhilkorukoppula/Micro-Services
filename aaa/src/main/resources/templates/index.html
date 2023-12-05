@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Enter Your Username</h1>
-    <form action="#" th:action="@{/greet}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/greet}" th:object="${user}" method="get">
         <input type="text" th:field="*{username}" />
         <button type="submit">Submit</button>
     </form>

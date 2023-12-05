@@ -111,7 +111,7 @@ function Login() {
   };
 
   return (
-    <Box className="homepage" sx={{ justifyContent: 'center', display: 'flex' }} item xs={12}>
+    <Box className="homepage" sx={{ justifyContent: 'center', display: 'flex' }} item="true" xs={12}>
       {isLoading ? (
         <Loading />
       ) : (

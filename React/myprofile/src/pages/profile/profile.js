@@ -1,6 +1,5 @@
 
-import { Avatar, Box,Grid, Button, TextField,Fade,Typography} from '@mui/material';
-import Modal from '@mui/material/Modal'; 
+import { Avatar, Box,Grid, Button, TextField,Fade,Typography,Modal, Container, ListItemText, ListItem, List} from '@mui/material'; 
 import './profile.css';  
 import * as React from 'react';
 import { useState, useEffect , useRef} from 'react';
@@ -25,7 +24,7 @@ import Update from './Update';
 export  const ApexChart = () => {
   const chartData = {
     series: [{
-      data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+      data: [92,90,75]
     }],
     options: {
       chart: {
@@ -42,14 +41,14 @@ export  const ApexChart = () => {
         enabled: false
       },
       xaxis: {
-        categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan', 'United States', 'China', 'Germany'],
+        categories: ['SSC','Diploma', 'Btech',],
       }
     }
   };
 
   return (
     <div id="chart">
-      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={350} />
+      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height={150} />
     </div>
   );
 };
@@ -58,12 +57,15 @@ export  const ApexChart = () => {
  function Profile() {
 
   // const token = sessionStorage.getItem("token")
-  const [data2, setData2] = useState();
+  const names=['Name','Email','Contact No','Gender','DOB']
+  const [data2, setData2] = useState([]);
   const [data1, setData1] = useState();
   const [description, setDescription] = useState();
   const [visible, setVisible] = useState(false);
   const [visible1, setVisible1] = useState(false);
   const about = useRef(null);
+  const home = useRef(null);
+  const contact = useRef(null);
   const [scrollCount, setScrollCount] = useState(0);
   const [showAvatar, setShowAvatar] = useState(true);
   const [hoveredItem, setHoveredItem] = useState(false); 
@@ -80,7 +82,7 @@ export  const ApexChart = () => {
     setHoveredItem(false);
   }
 
-  const handleClick = async () => {
+  const handleClickProfile = async () => {
     try{
      await service.getAllDetails().then((response)=>{
  
@@ -103,7 +105,7 @@ export  const ApexChart = () => {
   
     
 
-     const handleClick1 = async () => {
+     const handleClickDesc = async () => {
       
      
       await service.getDescription().then((res)=>{
@@ -157,7 +159,7 @@ const handleUploadButtonClick = () => {
  
     axios({ //it is used to call the service to conmplt the operation(upload)
       method: "put",
-      url: `${baseUrl}/uploadPic/${email}`,
+      url: `${baseUrl}/uploadPic`,
       data:form,
       headers: { "Content-Type": 'multipart/form-data' ,"Authorization" : 'Bearer ' + token},
     
@@ -197,16 +199,18 @@ const handleUploadButtonClick = () => {
   }, []);
 
   useEffect(() => {
-    if (scrollCount >= 14) {
+    if (scrollCount >= 10) {
       setShowAvatar(false);
+      handleClickProfile()
+      handleClickDesc()
+      document.body.style.animation= 'smooth'
     }
   else {
    setShowAvatar(true)
+   setVisible(false)
+   setVisible1(false)
   }
-  }, [scrollCount]);
-
- 
-  const [open, setOpen] = React.useState(false);
+  }, [scrollCount>=10]);
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleModalOpen = () => {
@@ -216,27 +220,6 @@ const handleUploadButtonClick = () => {
   const handleModalClose = () => {
     setOpenModal(false);
   }
-const style = {
-  // transform: 'translate(0%,200%)',
-  // width: 400,
-  // bgcolor: 'background.paper',
-  // boxShadow: 24,
-  // p: 4,
-  
- 
-    position: 'absolute',
-    top: '300px',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    transition: 'smooth',
-    width: 400,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    maxHeight: '90vh',
-    overflowY: 'hidden',
-    alignItems:'center',
-};
 
 
 
@@ -289,26 +272,31 @@ if (token) {
 }
 };
 
-
+useEffect(()=>{
+  console.log()
+},[])
 
   return (
-
-    <div className="App" item={'true'} xs={12}
+    
+      
+    <div className="App" item={'true'} xs={12} 
     sx={{ justifyContent:'center',
            justifyitems:'center',
-           }}  >
-             <DrawerAppBar aboutRef={about} />
            
-      <header className="App-header">
-            <img style={{position:'fixed'}} width='100%' height='100%' 
+           }}  >
+            
+            <DrawerAppBar aboutRef={about} homeRef={home} contactRef={contact}  ></DrawerAppBar>   
+      <header className="App-header" ref={home}>
+      <div style={{position:'fixed'}}>
+            <img 
             src={require('./computer.jpg')} alt='deleted'> 
-        </img>       
+           
+        </img>   
+        </div>    
       </header>
      
-      <Box className='div-cont'   sx={{ justifyContent:'center',
-           backgroundColor:'blue',
+      <div className='div-cont'   sx={{ justifyContent:'center',
            justifyitems:'center',
-           display:'flex',
            felxDirection:'column' }}  >
       <Box width={'100%'} height={'90px'}
          sx={{ justifyContent:'center',
@@ -353,10 +341,10 @@ if (token) {
         </Box>
         </Box>
        
-      </Box>
+      </div>
       
 
-       <Box
+       <Box   ref={about}
       className="div-cont1"
       sx={{
         justifyContent: 'center',
@@ -379,7 +367,7 @@ if (token) {
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
-                  onClick={handleClick1}
+                  onClick={handleClickDesc}
                 >
                   <h3>Who Am I ?</h3>
                 </Button>
@@ -409,7 +397,7 @@ if (token) {
           </Box>
            </Grid>
         
-        <Grid item xs={12} sm={4}   ref={about}>
+        <Grid item xs={12} sm={4} >
           <Box
             className="dive"
             sx={{
@@ -424,7 +412,7 @@ if (token) {
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
-                  onClick={handleClick}
+                  onClick={handleClickProfile}
                 >
                   <h3>Profile</h3>
                 </Button>
@@ -432,6 +420,7 @@ if (token) {
 
               <Grid>
                 <Grid textalign="justify" display="flex">
+                 
                   {visible &&
                     data2.map((item) => (
                       <Typography
@@ -441,15 +430,18 @@ if (token) {
                           color: 'blueviolet',
                           fontSize: '20px'
                         }}
-                      key={'index'}>
-                       Name: {item.name}<br />
-                        Email: {item.email} <br />
-                        Contact No: {item.contactNo} <br />
-                        Gender: {item.gender} <br />
-                        DOB: {item.dateOfBirth}
+                      key={item}>
+                        <div style={{justifyContent:'center'}}>
+                    <p>  Name    : {item.name} <br/>
+                     Email     : {item.email}  <br/>
+                     Contact No:{item.contactNo} <br/>
+                    Gender    :{item.gender} <br/>
+                      DOB       :{item.dateOfBirth}</p>
+                      </div>
                       </Typography>
-
+                  
                     ))}
+                   
                 </Grid>
               </Grid>
             </Grid>
@@ -470,7 +462,7 @@ if (token) {
                 <Button
                   className="button3"
                   style={{ marginTop: '20px', height: '50px' }}
-                  onClick={handleClick}
+                  onClick={handleClickProfile}
                 >
                   <h3>Experience</h3>
                 </Button>
@@ -484,7 +476,7 @@ if (token) {
     width:'100%',
          justifyContent:'flex-start',
         justifyitems:'', 
-        display:'flex',paddingLeft:'' }}>
+        display:'flex',marginLeft:'100px' }}>
 <h3 style={{color:'#d13459'}}>My Resume</h3>
     </Grid>    
    
@@ -556,9 +548,47 @@ if (token) {
      </Box>
      </Grid>
      </Grid>
+
+     <Box item xs={12} sm={3.5} ref={contact} style={{ 
+      display:'flex',
+      backgroundColor:'white',
+      width:'100%',
+      height:'500px'}}>
+        <Grid sx={{marginLeft:'100px',color:'#d13459'}}>
+          <span><h3 >Contact Details</h3></span>
+        </Grid>
+       <br/>
+         <form >
+           <Grid sx={{display:'flex',justifyContent:'center',justifyItems:'center',
+           height:'250px',
+           width:'100%',
+           marginTop:'50px',
+           backgroundColor:'white',
+           }}>
+          <Grid sx={{display:'flex',flexDirection:'column'}}>
+          <TextField sx={{width:'500px',marginTop:'20px'}} label='Name'></TextField>
+          <TextField sx={{width:'500px',marginTop:'20px'}} label='EmailID'></TextField>
+          <TextField sx={{width:'500px',marginTop:'20px'}} label='Conatact No' type='number'></TextField>
+          
+          </Grid>
+        <Grid>
+        <TextField id="outlined-multiline-static"
+          label="Comments"
+          multiline
+          rows={7.5} sx={{width:'500px',marginTop:'20px',marginLeft:'30px'}} ></TextField>
+          
+        </Grid>
+        </Grid>
+        <Button variant="contained" enableElevation>
+                Submit
+           </Button>
+         </form>
+         
+     </Box>
      </Box>
 
-   
+    
+
 
     <Box className='footer'>
     <br></br><br />
@@ -571,51 +601,7 @@ if (token) {
     <ReportGmailerrorredIcon/>&nbsp;
     <TwitterIcon/>
     </footer> 
-    </Box>
-  
-    <Modal   
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={openModal}
-                onClose={handleModalClose}
-                closeAfterTransition>
-               
-                    <Box sx={{ 
-                        display: 'flex',
-                        position:'sticky',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <Box sx={style}>
-                            <form onSubmit={handleAboutSubmit}>
-                                <TextField
-                                    required
-                                    id="outlined-required"
-                                    label="About Me"
-                                    sx={{
-                                        width: '100%',
-                                        margin: '10px 0px'
-                                    }} 
-                                    defaultValue={description} 
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                               
-                               
-                               <Grid item xs={12} sx={{display:'flex',
-                    justifyContent:'center',
-                    alignItems:'center'
-                }}>
-                        <Button   sx={{marginTop:"10px"}} type='submit' disableElevation variant="contained" >UPDATE</Button>
-
-                        <Button  sx={{marginLeft:"20px",marginTop:"10px"}} onClick={handleModalClose} variant='contained' >Cancel</Button>
-                    </Grid>
-                            </form>
-                        </Box>
-                    </Box>
-                  
-              
-            </Modal>
-      
+    </Box>      
             </div> 
            
   );

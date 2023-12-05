@@ -26,7 +26,6 @@ public class LoginDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
-        System.out.println("started "+username);
         Optional<MyProfile> profile=repo.findByEmail(username);
         return profile.map(SecurityConfig::new).orElseThrow(()-> new UsernameNotFoundException("user not found"));
 

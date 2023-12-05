@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseUrl="http://10.0.0.9:8087/api/V1/myprofile"
+export const baseUrl="http://10.0.0.78:8087/api/V1/myprofile"
 
 export const myAxios = axios.create({
     baseURL: `${baseUrl}`

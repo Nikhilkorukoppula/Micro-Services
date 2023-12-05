@@ -13,6 +13,10 @@
         <option value="$PROJECT_DIR$/../../eidiko_recruitment_service/pom.xml" />
         <option value="$PROJECT_DIR$/../../../SampleBatchProcessing-main/SampleBatchProcessing-main/pom.xml" />
         <option value="$PROJECT_DIR$/../../../GitHub/Employee_Portal/eidiko-employee-service/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Kafka/KafkaProject/pom.xml" />
+        <option value="$PROJECT_DIR$/../../Kafka/KafkaConsumer/pom.xml" />
+        <option value="$PROJECT_DIR$/../../WebSocket/pom.xml" />
+        <option value="$PROJECT_DIR$/../api-gateway/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

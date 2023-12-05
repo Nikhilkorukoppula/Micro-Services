@@ -210,7 +210,7 @@ public class MyProfileService {
 			 catch (IOException e) {
 				 System.out.println("exception occurred");
 				 if (e instanceof FileAlreadyExistsException) {
-					 throw new RuntimeException("A file of that name already exists.");
+					 throw new RuntimeException("A file name already exists.");
 				 }
 				 throw new RuntimeException(e.getMessage());
 			}
@@ -348,8 +348,5 @@ public ResponseEntity<Map<String, Object>> updateExperience(String email, List<S
 	return ResponseEntity.ok(map);
 	
 }
-
-
-
 
 }

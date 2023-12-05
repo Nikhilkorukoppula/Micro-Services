@@ -7,12 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="eidiko_recruitment_service" />
         <module name="HelloRoomieTest" />
-        <module name="myWebsite" />
         <module name="Authentication" />
+        <module name="KafkaProject" />
+        <module name="api-gateway" />
+        <module name="KafkaConsumer" />
+        <module name="eidiko_recruitment_service" />
+        <module name="myWebsite" />
         <module name="pdfReader" />
         <module name="eidiko-employee-service" />
+        <module name="WebSocket" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +28,10 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Authentication" options="-parameters" />
       <module name="HelloRoomieTest" options="-parameters" />
+      <module name="KafkaConsumer" options="-parameters" />
+      <module name="KafkaProject" options="-parameters" />
+      <module name="WebSocket" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
       <module name="eidiko-employee-service" options="-parameters" />
       <module name="eidiko-leaves-service" options="-parameters" />
       <module name="eidiko-reporting-manager-service" options="-parameters" />

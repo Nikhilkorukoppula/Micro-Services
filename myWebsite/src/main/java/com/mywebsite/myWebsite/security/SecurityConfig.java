@@ -23,6 +23,7 @@ public class SecurityConfig implements UserDetails {
     public SecurityConfig(MyProfile details) {
         this.userName=details.getEmail();
         this.password=details.getPassword();
+       // this.authority=Arrays.stream((details.getRoles().split(","))).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
          }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

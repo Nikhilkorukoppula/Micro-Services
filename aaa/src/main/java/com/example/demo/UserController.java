@@ -16,8 +16,10 @@ public class UserController {
     }
 
     @GetMapping("/greet")
-    public String greet(User user) {
+    public String greet(User user,Model modal) {
         LoggerService.logMessage("Hi " + user.getUsername());
-        return "greet";
+        System.out.println(user.getUsername());
+        modal.addAttribute("name",user.getUsername());
+        		return "hello";
     }
 }

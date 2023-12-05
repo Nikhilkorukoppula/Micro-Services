@@ -6,12 +6,12 @@ export const service={
 
     getAllDetails:async function(){
 
-    return await myAxios.get(`getAll/${email}`).then((res)=>res.data)
+    return await myAxios.get(`getAll`).then((res)=>res.data)
  },
 
  getDescription:async function(){
 
-    return await myAxios.get(`getDesc/${email}`).then((res)=>res.data)
+    return await myAxios.get(`getDesc`).then((res)=>res.data)
  },
 
 

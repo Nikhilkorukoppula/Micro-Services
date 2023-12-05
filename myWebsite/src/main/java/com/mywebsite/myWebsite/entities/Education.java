@@ -22,6 +22,6 @@ public class Education {
     private String percentage;
     private String stream;
     private String boardOfInstitute;
-	
-    
+
+
 }

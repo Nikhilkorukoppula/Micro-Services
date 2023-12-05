@@ -1,14 +1,14 @@
 .App {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    position: absolute;
-    overflow: visible;
-    /* background-image: url(computer-1867758_1920-min.jpg);
-     */
+    /* background-image: url(computer.jpg); */
     
    }
-  
+   .App-header {
+    height:500px;
+    /* background-image: url(computer.jpg); */
+    flex-direction: column;
+  }
   .div1{
     display: flex;
     width: 100%;
@@ -98,7 +98,7 @@
     display: flex;
     top: 0;
     z-index: 2;
-    
+    position: relative;
   }
   .fixed{
     position: fixed;
@@ -213,12 +213,7 @@
     }
   }
   
-  .App-header {
-    height:400px;
-    display: flex;
-    margin-top: 20px;
-    flex-direction: column;
-  }
+  
   
   .App-link {
     color: #61dafb;

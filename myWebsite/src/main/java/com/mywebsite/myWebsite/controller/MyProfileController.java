@@ -81,9 +81,10 @@ public class MyProfileController {
 		return myProfileService.uploadPic(email,file);
 	}
 
-	@GetMapping("getPic")
-	public byte[] getPic() throws IOException {
-		String email=JavaTokenExtract.getCurrentUser().getUsername();
+	@GetMapping("getPic/{email}")
+	public byte[] getPic(@PathVariable("email")String email) throws IOException {
+		//String email=JavaTokenExtract.getCurrentUser().getUsername();
+		System.out.println(email);
 		return myProfileService.getPic(email);
 	}
 	@PutMapping("update")

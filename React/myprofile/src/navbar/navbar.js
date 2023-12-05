@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useState,useEffect } from 'react';
 import Modal from '@mui/material/Modal'; 
-import { Avatar, Card, Grid, TextField } from '@mui/material';
+import { Avatar, Backdrop, Card, Container, Fade, Grid, TextField } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import axios from 'axios';
 import { baseUrl } from '../Server/MyAxios';
@@ -26,8 +26,8 @@ import Profilemodal from '../pages/profile/profilemodal';
 
  
  
-const drawerWidth = 240;
-const navItems = ['Home','Profile', 'Contact', 'About','Logout'];
+const drawerWidth = 200;
+const navItems = ['Home','Profile','About', 'Contact','Logout'];
 
 
 
@@ -46,8 +46,12 @@ function DrawerAppBar(props) {
   const token=sessionStorage.getItem("token")
   
 
-    const {aboutRef} = props
+    // const aboutRef= React.createRef()
+    // const homeRef= React.createRef()
 
+    const {aboutRef}= props
+    const {homeRef}= props
+    const {contactRef}= props
     const handleLinkClick = (section) => {
       if(section==='Logout'){
         Swal.fire({
@@ -76,31 +80,44 @@ function DrawerAppBar(props) {
        
       }
       
-      else if(section==='About'){
-      scrollToAbout();
-      return;
-      }
       else if(section==='Home'){
-        return
+        scrollToHome();
+        return;
       }
+
+      else if(section==='About'){
+        scrollToAbout();
+        return;
+      }
+
       else if(section==='Profile'){
         setOpenModal(!openModal)
       
         return 
     }
       else if(section==='Contact'){
+        scrollToContact();
         return
       }
       handleDrawerToggle();
     };
 
-    
+    const scrollToHome = () => {
+      if (homeRef.current) {
+        homeRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+    const scrollToContact = () => {
+      if (contactRef.current) {
+        contactRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
     const scrollToAbout = () => {
       if (aboutRef.current) {
         aboutRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     };
-
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -131,9 +148,6 @@ function DrawerAppBar(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-useEffect(()=>{
-  document.body.style.overflowY = 'visible';
-},[openModal])
 
  const handleModalClose = () => {
       setOpenModal(false)
@@ -147,17 +161,14 @@ useEffect(()=>{
 
   const style = {
     position: 'absolute',
-    top: '350px',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    transition: 'smooth',
+    top: '10%',
+    left: '30%',
     width: 500,
     bgcolor: 'background.paper',
     boxShadow: 'lg',
     p: 4,
     maxHeight: '90vh',
     overflowY:'scroll',
-    behavior:'smooth',
     }
   
   const  handleProfile=()=>{
@@ -205,7 +216,7 @@ setDropProfile(!dropProfile)
   
       axios({ //it is used to call the service to conmplt the operation(upload)
         method: "put",
-        url: `${baseUrl}/uploadPic/${email}`,
+        url: `${baseUrl}/uploadPic`,
         data:form,
         headers: { "Content-Type": 'multipart/form-data' ,"Authorization" : 'Bearer ' + token},
       
@@ -222,9 +233,10 @@ setDropProfile(!dropProfile)
         });
     };
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar component="nav">
+    <Box sx={{display:'flex'}}>
+       <CssBaseline />
+      <AppBar component="nav"  >
+        
         <Toolbar>
           <IconButton
            
@@ -269,19 +281,20 @@ setDropProfile(!dropProfile)
         </Drawer> 
       </Box>
     
-       <Modal
-                aria-labelledby="transition-modal-title"
+       <Modal   aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={openModal}
                 onClose={handleModalClose}
-                closeAfterTransition>
-       
-       <Card>
-        <Profilemodal/>
-       </Card>
-       </Modal>
-      
-     {/*  <Box sx={{ 
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}>
+    
+      <Fade in={openModal}>
+      <Box sx={{ 
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -505,8 +518,9 @@ setDropProfile(!dropProfile)
            
         </Box> 
   </Box>
-        
-            </Modal> */}
+
+  </Fade>      
+            </Modal> 
      </Box>
   );
 }
